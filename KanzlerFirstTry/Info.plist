@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>app-1-744291529157-ios-07c669da2466ecb1ebdbac</string>
+			</array>
+		</dict>
+	</array>
+	<key>UIAppFonts</key>
+	<array>
+		<string>Rubik-LightItalic.ttf</string>
+		<string>RubikOne-Regular.ttf</string>
+		<string>Rubik-Bold.ttf</string>
+		<string>Rubik-SemiBold.ttf</string>
+		<string>Rubik-Black.ttf</string>
+		<string>Rubik.ttf</string>
+		<string>Rubik-Italic.ttf</string>
+	</array>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>remote-notification</string>
+	</array>
+</dict>
+</plist>
