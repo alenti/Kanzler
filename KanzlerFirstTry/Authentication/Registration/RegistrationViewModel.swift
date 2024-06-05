@@ -6,8 +6,7 @@
 //
 
 import SwiftUI
-import Foundation
-import Combine
+import FirebaseAuth
 
 class RegistrationViewModel: ObservableObject {
     @Published var phoneNumber: String = ""
@@ -35,7 +34,6 @@ class RegistrationViewModel: ObservableObject {
         let birthDate = "\(selection ?? "") \(selection1 ?? "") \(selection2 ?? "")"
         let gender = selectedGender?.rawValue ?? ""
 
-        // Подготовка данных для регистрации
         AuthManager.shared.prepareUserRegistration(
             phoneNumber: phoneNumber,
             password: password,
@@ -45,13 +43,14 @@ class RegistrationViewModel: ObservableObject {
             gender: gender
         )
 
-        // Инициировать отправку СМС-кода
         AuthManager.shared.startAuth(phoneNumber: phoneNumber) { success in
-            if success {
-                // Переход к экрану подтверждения номера
-                self.showNumberConfirmation = true
-            } else {
-                // Обработка ошибки
+            DispatchQueue.main.async {
+                if success {
+                    print("SMS отправлено успешно")
+                    self.showNumberConfirmation = true
+                } else {
+                    print("Ошибка отправки SMS")
+                }
             }
         }
     }

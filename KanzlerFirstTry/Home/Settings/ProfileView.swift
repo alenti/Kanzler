@@ -6,10 +6,9 @@
 //
 
 import SwiftUI
+import FirebaseAuth
 
-// Основной View профиля пользователя
 struct ProfileView: View {
-    // Предполагаемые данные для демонстрации
     let user = User(name: "Василий Петров", phoneNumber: "+996 (555) 77-66-55", bonusPoints: 150, discount: 5)
     let menuItems = [
         MenuItem(icon: "clock.arrow.circlepath", title: "История покупок"),
@@ -20,28 +19,39 @@ struct ProfileView: View {
     ]
     
     @StateObject var marketsViewModel = MarketViewModel()
+    @EnvironmentObject var userSession: UserSession
+    @State private var showLogoutAlert = false
 
     var body: some View {
         NavigationView {
             VStack(spacing: 0) {
-                CustomNavigationBar(title: "Профиль",isCentered: false)
+                CustomNavigationBar(title: "Профиль", isCentered: false)
                 ScrollView {
-                    VStack(alignment: .leading,spacing: 0) {
+                    VStack(alignment: .leading, spacing: 0) {
                         ProfileHeaderView(user: user)
-                            .padding(.top,10)
+                            .padding(.top, 10)
                         BonusCashbackView(bonusPoints: user.bonusPoints, discount: user.discount)
                         SettingsMenuView(menuItems: menuItems)
                         StoreScrollView()
                             .environmentObject(marketsViewModel)
                             .padding(.vertical)
-                        LogoutButton{}
-                            .padding(.bottom,30)
+                        LogoutButton {
+                            showLogoutAlert = true
+                        }
+                        .padding(.bottom, 30)
                     }
                 }
                 .background(Color(.systemGray6))
-                
-                //.edgesIgnoringSafeArea(.top)
             }
+        }
+        .alert(isPresented: $showLogoutAlert) {
+            Alert(
+                title: Text("Вы действительно хотите выйти?"),
+                primaryButton: .destructive(Text("Выйти")) {
+                    userSession.signOut()
+                },
+                secondaryButton: .cancel(Text("Остаться"))
+            )
         }
     }
 }
@@ -71,7 +81,7 @@ struct BonusCashbackView: View {
     let discount: Int
     
     var body: some View {
-        HStack() {
+        HStack {
             VStack {
                 Text("\(bonusPoints)")
                     .font(.custom("Rubik-SemiBold", size: 30))
@@ -79,12 +89,12 @@ struct BonusCashbackView: View {
                 Text("бонусов")
                     .font(.subheadline)
             }
-            .padding(.horizontal,20)
+            .padding(.horizontal, 20)
             
             Rectangle()
                 .fill(Color(.systemGray2))
                 .frame(width: 2)
-                .padding(.vertical,15)
+                .padding(.vertical, 15)
             
             VStack {
                 Text("\(discount)%")
@@ -93,10 +103,9 @@ struct BonusCashbackView: View {
                 Text("скидка")
                     .font(.subheadline)
             }
-            .padding(.horizontal,20)
+            .padding(.horizontal, 20)
         }
-        
-        .frame(maxWidth: .infinity,maxHeight: 65)
+        .frame(maxWidth: .infinity, maxHeight: 65)
         .background(Color.white)
         .cornerRadius(10)
         .padding(.horizontal)
@@ -134,13 +143,10 @@ struct SettingsRow: View {
             HStack {
                 Image(systemName: item.icon)
                     .foregroundColor(.black)
-                    .font(Font.system(size: 20,weight: .light))
-                    //.font(.system(size: 20))
-                    
+                    .font(Font.system(size: 20, weight: .light))
                 Text(item.title)
                     .foregroundColor(.black)
                     .font(.custom("Rubik-Light", size: 16))
-                
                 Spacer()
                 Image(systemName: "chevron.right")
                     .foregroundColor(.gray)
@@ -159,7 +165,6 @@ struct StoreScrollView: View {
             HStack(spacing: 20) {
                 ForEach(viewModel.markets) { markets in
                     MarketInfoView(store: markets)
-                    
                         .onTapGesture {
                             // Обработка нажатия на баннер
                         }
@@ -168,7 +173,6 @@ struct StoreScrollView: View {
             .padding(.horizontal)
         }
         .scrollTargetLayout()
-
     }
 }
 
@@ -181,11 +185,9 @@ struct LogoutButton: View {
                 Image(systemName: "person.slash")
                     .foregroundColor(.black)
                     .font(Font.system(size: 20, weight: .light))
-                    
                 Text("Выход")
                     .foregroundColor(.black)
                     .font(.custom("Rubik-Light", size: 16))
-                
                 Spacer()
             }
             .padding()

@@ -5,36 +5,36 @@
 //  Created by Notnik_kg on 19.12.2023.
 //
 import SwiftUI
+import Firebase
 
 struct NumberConfirmation: View {
-    
     @Environment(\.presentationMode) var presentationMode
     @State private var otpText = ""
     @FocusState private var isKeyboardShowing: Bool
-    @State private var shouldNavigateToHome = false // Состояние для навигации на HomeView
+   // @State private var shouldNavigateToHome = false
+    @EnvironmentObject var userSession: UserSession
+    
 
     var body: some View {
         GeometryReader { geometry in
             VStack {
                 HStack {
                     Button(action: {
-                        // Вернуться на предыдущий View
                         presentationMode.wrappedValue.dismiss()
                     }) {
                         Image(systemName: "arrow.backward")
                             .fontWeight(.semibold)
                             .foregroundColor(.black)
                     }
-                    .padding(.leading) // Padding для кнопки
+                    .padding(.leading)
 
                     Spacer()
                 }
-                // Наложение текста поверх HStack
                 .overlay(
                     Text("Введите код")
                         .font(.custom("RubikOne-Regular", size: geometry.size.width * 0.045))
                         .foregroundColor(.black),
-                    alignment: .center // Выравнивание текста по центру
+                    alignment: .center
                 )
                 .padding(.vertical, geometry.size.height * 0.03)
 
@@ -44,13 +44,11 @@ struct NumberConfirmation: View {
                     .frame(width: geometry.size.width * 0.8, height: geometry.size.height * 0.2)
 
                 Text("Введите код подтверждения из SMS-сообщения")
-                    .fixedSize(horizontal: true, vertical: false)
                     .font(.custom("Rubik-light", size: geometry.size.width * 0.038))
                     .multilineTextAlignment(.center)
                     .padding()
                     .lineLimit(1)
 
-                // Используем вашу структуру OTP для ввода кода
                 OTP(otpText: $otpText)
                     .padding(.bottom, geometry.size.height * 0.03)
                     .padding(.top, geometry.size.height * 0.01)
@@ -70,10 +68,9 @@ struct NumberConfirmation: View {
                         .shadow(color: .black.opacity(0.25), radius: 2, x: 0, y: 4)
                 }
                 .padding()
-                .disableWithOpacity(otpText.count < 6) // Блокируем кнопку, если код не введен полностью
+                .disableWithOpacity(otpText.count < 6)
 
-                // Условный NavigationLink для перехода на HomeView
-//                NavigationLink(destination: HomeView(), isActive: $shouldNavigateToHome) {
+//                NavigationLink(destination: ContentView(), isActive: $shouldNavigateToHome) {
 //                    EmptyView()
 //                }
 
@@ -86,7 +83,7 @@ struct NumberConfirmation: View {
                 .padding()
             }
             .navigationBarBackButtonHidden(true)
-            .contentShape(Rectangle()) // Добавляем это для работы onTapGesture по всей области VStack
+            .contentShape(Rectangle())
             .onTapGesture {
                 UIApplication.shared.hideKeyboard()
             }
@@ -97,16 +94,29 @@ struct NumberConfirmation: View {
         let code = otpText
         AuthManager.shared.verifyCode(smsCode: code) { success in
             if success {
-                // Успешная верификация, переход к HomeView
-                self.shouldNavigateToHome = true
+                // Успешная верификация, регистрация пользователя и переход к MainTabView
+                if let tempUserData = AuthManager.shared.tempUserData {
+                    AuthManager.shared.registerUser(userData: tempUserData) { registerSuccess in
+                        DispatchQueue.main.async {
+                            if registerSuccess {
+                                withAnimation {
+                                    userSession.signIn()
+                                    //shouldNavigateToHome = true
+                                }
+                            } else {
+                                print("Ошибка при регистрации пользователя")
+                            }
+                        }
+                    }
+                }
             } else {
-                // Обработка ошибки верификации
+                print("Ошибка верификации кода")
             }
         }
     }
 
     private func resendCode() {
-        // Добавьте логику для повторной отправки кода верификации
+        // Логика для повторной отправки кода верификации
     }
 }
 
@@ -191,6 +201,7 @@ extension Binding where Value == String {
         return self
     }
 }
+
 
 #Preview {
     NumberConfirmation()

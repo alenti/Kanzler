@@ -10,6 +10,8 @@ import SwiftUI
 struct Registration: View {
     @Environment(\.presentationMode) var presentationMode
     @StateObject var viewModel = RegistrationViewModel()
+    
+    @EnvironmentObject var userSession: UserSession
 
     let dayNumbers = (1...31).map { String($0) }
     let yearNumbers = (1923...2023).reversed().map { String($0) }
@@ -22,9 +24,8 @@ struct Registration: View {
         GeometryReader { geometry in
             ZStack(alignment: .top) {
                 ScrollView {
-                    VStack( ) {
-                       // Spacer()
-                        CustomTextField(placeholder: "Номер телефона*", text: $viewModel.phoneNumber, isNumberOnly: true)
+                    VStack {
+                        CustomTextField(placeholder: "Номер телефона*", text: $viewModel.phoneNumber)
                         CustomTextField(placeholder: "Пароль*", text: $viewModel.password, isSecure: true)
                         CustomTextField(placeholder: "Имя*", text: $viewModel.userName)
                         CustomTextField(placeholder: "Фамилия*", text: $viewModel.userSurname)
@@ -37,28 +38,25 @@ struct Registration: View {
                         }
                         .padding(.horizontal, geometry.size.width * 0.06)
 
-                        HStack() {
+                        HStack {
                             DropDown(hint: "День", options: dayNumbers, anchor: .bottom, selection: $viewModel.selection)
-                               // .frame(width: geometry.size.width *  0.25)
                             DropDown(hint: "Месяц", options: monthsNumber, anchor: .bottom, selection: $viewModel.selection1)
-                            //    .frame(width: geometry.size.width * 0.33)
                             DropDown(hint: "Год", options: yearNumbers, anchor: .bottom, selection: $viewModel.selection2)
-                             //   .frame(width: geometry.size.width * 0.25)
                         }
                         .padding(.horizontal, geometry.size.width * 0.06)
                         .padding(.bottom, geometry.size.height * 0.01)
                         .zIndex(10.0)
 
-                        HStack() {
+                        HStack {
                             Text("Твой пол")
                                 .font(.custom("Rubik-light", size: geometry.size.width * 0.045))
                                 .foregroundColor(.black)
                             Spacer()
                         }
-                        .padding(.top,geometry.size.width * 0.09)
+                        .padding(.top, geometry.size.width * 0.09)
                         .padding(.horizontal, geometry.size.width * 0.06)
 
-                        HStack (alignment: .center){
+                        HStack(alignment: .center) {
                             RadioButton(label: "Мужской", isChosen: viewModel.selectedGender == .male, imageName: "Man")
                                 .onTapGesture {
                                     viewModel.selectedGender = .male
@@ -97,13 +95,12 @@ struct Registration: View {
                                 .padding(.top, 10)
                         }
 
-                        NavigationLink(destination: NumberConfirmation(), isActive: $viewModel.showNumberConfirmation) {
+                        NavigationLink(destination: NumberConfirmation().environmentObject(userSession), isActive: $viewModel.showNumberConfirmation) {
                             EmptyView()
                         }
-                        .padding(.bottom,25)
+                        .padding(.bottom, 25)
                     }
                     .padding(.top, geometry.safeAreaInsets.top * 2.2)
-                    
                 }
 
                 HStack {
@@ -117,8 +114,6 @@ struct Registration: View {
                     }
                     .padding(.horizontal)
                     .padding(.top, geometry.safeAreaInsets.top * 1.4)
-                   // .background(Color.white)
-                    //.shadow(color: .black.opacity(0.25), radius: 2, x: 0, y: 4)
                 }
             }
             .ignoresSafeArea()

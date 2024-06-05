@@ -15,4 +15,17 @@ class UserSession: ObservableObject {
     init() {
         self.userID = Auth.auth().currentUser?.uid
     }
+    
+    func signIn() {
+        self.userID = Auth.auth().currentUser?.uid
+    }
+    
+    func signOut() {
+        do {
+            try Auth.auth().signOut()
+            self.userID = nil
+        } catch {
+            print("Error signing out: \(error.localizedDescription)")
+        }
+    }
 }

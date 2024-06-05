@@ -15,39 +15,43 @@ import CoreImage.CIFilterBuiltins
 class AuthManager {
     static let shared = AuthManager()
     private let auth = Auth.auth()
-    
     private var verificationId: String?
-    private var tempUserData: [String: Any]?
+    public var tempUserData: [String: Any]?
 
     public func startAuth(phoneNumber: String, completion: @escaping (Bool) -> Void) {
+        print("Starting phone number verification for: \(phoneNumber)")
         PhoneAuthProvider.provider().verifyPhoneNumber(phoneNumber, uiDelegate: nil) { [weak self] verificationId, error in
-            guard let strongSelf = self, let verificationId = verificationId, error == nil else {
+            if let error = error {
+                print("Ошибка отправки SMS: \(error.localizedDescription)")
                 completion(false)
                 return
             }
-            strongSelf.verificationId = verificationId
+            guard let verificationId = verificationId else {
+                print("Verification ID is nil")
+                completion(false)
+                return
+            }
+            self?.verificationId = verificationId
+            print("Verification ID received: \(verificationId)")
             completion(true)
         }
     }
 
-   
     public func verifyCode(smsCode: String, completion: @escaping (Bool) -> Void) {
         guard let verificationId = verificationId else {
+            print("Verification ID is nil, cannot verify code")
             completion(false)
             return
         }
         let credential = PhoneAuthProvider.provider().credential(withVerificationID: verificationId, verificationCode: smsCode)
-        auth.signIn(with: credential) { [weak self] result, error in
-            guard result != nil, error == nil else {
+        auth.signIn(with: credential) { result, error in
+            if let error = error {
+                print("Error during code verification: \(error.localizedDescription)")
                 completion(false)
                 return
             }
-            // После успешной верификации, регистрируем пользователя
-            if let tempUserData = self?.tempUserData {
-                self?.registerUser(userData: tempUserData, completion: completion)
-            } else {
-                completion(true)
-            }
+            print("Code verification successful")
+            completion(true)
         }
     }
 
@@ -64,7 +68,7 @@ class AuthManager {
         ]
     }
 
-    private func registerUser(userData: [String: Any], completion: @escaping (Bool) -> Void) {
+    public func registerUser(userData: [String: Any], completion: @escaping (Bool) -> Void) {
         guard let email = userData["email"] as? String, let password = userData["password"] as? String else {
             completion(false)
             return
@@ -72,6 +76,7 @@ class AuthManager {
 
         auth.createUser(withEmail: email, password: password) { [weak self] authResult, error in
             if let error = error {
+                print("Error during user registration: \(error.localizedDescription)")
                 completion(false)
                 return
             }
@@ -84,7 +89,7 @@ class AuthManager {
             var userData = userData
             userData.removeValue(forKey: "email")
             userData.removeValue(forKey: "password")
-            
+
             self?.saveUserData(userId: userId, userData: userData, completion: completion)
         }
     }
@@ -93,14 +98,15 @@ class AuthManager {
         let db = Firestore.firestore()
         db.collection("users").document(userId).setData(userData) { error in
             if let error = error {
+                print("Error saving user data: \(error.localizedDescription)")
                 completion(false)
             } else {
-                completion(true)
+                self.generateAndSaveQRCode(userId: userId, userData: userData, completion: completion)
             }
         }
     }
-    
-    func generateAndSaveQRCode(userId: String, userData: [String: Any], completion: @escaping (Bool) -> Void) {
+
+    private func generateAndSaveQRCode(userId: String, userData: [String: Any], completion: @escaping (Bool) -> Void) {
         let qrData = "\(userId);\(userData["phoneNumber"] as? String ?? "")"
         let db = Firestore.firestore()
         db.collection("users").document(userId).updateData(["qrCode": qrData]) { error in
