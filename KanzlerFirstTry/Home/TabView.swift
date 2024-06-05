@@ -72,61 +72,6 @@ struct MainTabView: View {
     
 }
 
-//struct TabScreenView: View {
-//    // enum для Tab, добавление других вкладок по необходимости
-//    enum Tab {
-//        case home, goals, settings
-//    }
-//
-//    @State private var selectedTab: Tab = .home
-//
-//    var body: some View {
-//        TabView(selection: $selectedTab) {
-//            HomeView()
-//                .tabItem {
-//                    Label("Home", systemImage: "house")
-//                }
-//                .tag(Tab.home)
-//
-//            QR_CODE()
-//                .tabItem {
-//                    Label("Goals", systemImage: "flag")
-//                }
-//                .tag(Tab.goals)
-//
-//            Profile()
-//                .tabItem {
-//                    Label("Settings", systemImage: "gear")
-//                }
-//                .tag(Tab.settings)
-//        }
-//    }
-//}
-
-//// Расширение должно быть вне объявления структуры TabScreenView
-//extension TabScreenView {
-//
-//    private func tabSelection() -> Binding<Tab> {
-//      Binding { //Это блок get
-//       self.selectedTab
-//      } set: { tappedTab in
-//
-//    if tappedTab == self.selectedTab {
-//        //Пользователь нажал на значок активной вкладки => Переход к корневому представлению/Прокрутка вверх
-//
-//          if homeNavigationStack.isEmpty {
-//           //Пользователь уже находится на главном представлении, прокрутка вверх
-//          } else {
-//          //Переход к главному представлению путем очистки стека
-//           homeNavigationStack = []
-//          }
-//       }
-//
-//       //Установка текущей вкладки на вкладку, выбранную пользователем
-//       self.selectedTab = tappedTab
-//      }
-//     }
-//}
 
 #Preview {
     MainTabView()

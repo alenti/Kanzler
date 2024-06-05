@@ -7,25 +7,20 @@
 
 import SwiftUI
 import FirebaseAuth
+import FirebaseAppCheck
 
 struct ContentView: View {
-    @State var userphone = ""
-    @State var userpassword = ""
-//    @State private var selectedNumber: Int? = nil
-//    @State private var isAuthenticated = Auth.auth().currentUser != nil
+    @EnvironmentObject var userSession: UserSession
 
-       var body: some View {
-           //MainTabView ()
-           // Проверка статуса аутентификации
-//           if isAuthenticated {
-//               // Пользователь аутентифицирован, показываем HomeView
-//               HomeView()
-//           } else {
-               // Пользователь не аутентифицирован, показываем экран входа
-           //    SignIn()
-           NumberConfirmation()
-//           }
-       }
+    var body: some View {
+        if userSession.userID != nil {
+            MainTabView()
+                .transition(.slide)
+        } else {
+            SignIn()
+                .transition(.slide)
+        }
+    }
 }
 
 #Preview {

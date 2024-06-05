@@ -1,21 +1,18 @@
 //
-//  SignIn.swift
+//  PasswordResetView.swift
 //  KanzlerFirstTry
 //
-//  Created by Notnik_kg on 25.11.2023.
+//  Created by Notnik_kg on 05.06.2024.
 //
 
 import SwiftUI
-import FirebaseAuth
 
-struct SignIn: View {
+struct PasswordResetView: View {
     @State var userphone = ""
     @State var userpassword = ""
-    @State private var showAlert = false
-    @State private var alertMessage = ""
-    @EnvironmentObject var userSession: UserSession
-
+    
     var body: some View {
+        
         GeometryReader { geometry in
             ZStack {
                 Image("backgroundFirstView")
@@ -83,7 +80,6 @@ struct SignIn: View {
                     
                     VStack {
                         Button(action: {
-                            signIn()
                         }) {
                             Text("Войти")
                                 .font(.custom("RubikOne-Regular", size: geometry.size.width * 0.045))
@@ -106,28 +102,6 @@ struct SignIn: View {
                         }
                     }
                     
-                    VStack {
-                        Text("Впервые у нас?")
-                            .font(.custom("Rubik-Light", size: geometry.size.width * 0.035))
-                            .multilineTextAlignment(.center)
-                        
-                        NavigationLink(destination: Registration().environmentObject(userSession)) {
-                            Text("Зарегистрироваться")
-                                .font(.custom("Rubik", size: geometry.size.width * 0.04))
-                                .foregroundColor(.black)
-                                .frame(width: geometry.size.width * 0.8, height: geometry.size.height * 0.05)
-                                .background(
-                                    RoundedRectangle(cornerRadius: 15)
-                                        .stroke(Color.red, lineWidth: 1)
-                                        .background(Color(red: 0.98, green: 0.95, blue: 0.95))
-                                )
-                                .padding(.horizontal)
-                                .multilineTextAlignment(.center)
-                        }
-                    }
-                    .padding(.top, geometry.safeAreaInsets.top * 1.7)
-                    .padding(.bottom, geometry.size.height * 0.03)
-                    
                     Spacer()
                 }
                 .contentShape(Rectangle())
@@ -136,26 +110,10 @@ struct SignIn: View {
                 }
             }
             .background(Color(red: 0.98, green: 0.98, blue: 0.98))
-            .alert(isPresented: $showAlert) {
-                Alert(title: Text("Ошибка"), message: Text(alertMessage), dismissButton: .default(Text("Ок")))
-            }
-        }
-    }
-    
-    private func signIn() {
-        Auth.auth().signIn(withEmail: userphone, password: userpassword) { authResult, error in
-            if let error = error {
-                alertMessage = error.localizedDescription
-                showAlert = true
-            } else {
-                withAnimation(.easeInOut) {
-                    userSession.signIn()
-                }
-            }
         }
     }
 }
 
 #Preview {
-    SignIn()
+    PasswordResetView()
 }
