@@ -25,8 +25,8 @@ struct Registration: View {
             ZStack(alignment: .top) {
                 ScrollView {
                     VStack {
-                        CustomTextField(placeholder: "Номер телефона*", text: $viewModel.phoneNumber)
-                        CustomTextField(placeholder: "Пароль*", text: $viewModel.password, isSecure: true)
+                        CustomTextField(placeholder: "+996 000 00 00 00*", text: $viewModel.phoneNumber,isNumberOnly: true)
+//                        CustomTextField(placeholder: "Пароль*", text: $viewModel.password, isSecure: true)
                         CustomTextField(placeholder: "Имя*", text: $viewModel.userName)
                         CustomTextField(placeholder: "Фамилия*", text: $viewModel.userSurname)
 

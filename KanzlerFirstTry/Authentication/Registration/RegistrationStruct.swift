@@ -81,34 +81,34 @@ struct CustomTextField: View {
         ZStack(alignment: .leading) {
             if text.isEmpty {
                 Text(placeholder)
-                    .font(.custom("Rubik-light", size: 18))
-                    .foregroundColor(.black)
+                    .font(.custom("Rubik-light", size: 19))
+                    .foregroundColor(.gray)
                     .padding(.horizontal, 25)
             }
             if isSecure {
                 SecureField("", text: $text)
-                    .font(.custom("Rubik-light", size: 18))
+                    .font(.custom("Rubik-light", size: 19))
                     .foregroundColor(.black)
                     .padding(.horizontal, 25)
                     .cornerRadius(5)
             } else {
                 TextField("", text: $text)
-                    .font(.custom("Rubik-light", size: 18))
+                    .font(.custom("Rubik-light", size: 19))
                     .foregroundColor(.black)
                     .padding(.horizontal, 25)
                     .cornerRadius(5)
-                    .keyboardType(isNumberOnly ? .numberPad : .default)
-                    .onChange(of: text) { newValue in
-                        if isNumberOnly {
-                            let filtered = newValue.filter { "0123456789".contains($0) }
-                            if filtered != newValue {
-                                text = filtered
-                            }
-                        }
-                    }
+                    .keyboardType(isNumberOnly ? .phonePad : .default)
+//                    .onChange(of: text) { newValue in
+//                        if isNumberOnly {
+//                            let filtered = newValue.filter { "0123456789+".contains($0) }
+//                            if filtered != newValue {
+//                                text = filtered
+//                            }
+//                        }
+//                    }
             }
         }
-        .padding(.bottom, 35)
+        .padding(.bottom, 38)
         .background(
             Rectangle()
                 .frame(height: 1)
@@ -117,6 +117,11 @@ struct CustomTextField: View {
         )
     }
 }
+
+#Preview {
+    Registration()
+}
+
 
 #Preview {
     Registration()

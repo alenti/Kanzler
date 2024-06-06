@@ -10,7 +10,6 @@ import FirebaseAuth
 
 class RegistrationViewModel: ObservableObject {
     @Published var phoneNumber: String = ""
-    @Published var password: String = ""
     @Published var userName: String = ""
     @Published var userSurname: String = ""
     @Published var gender: String = ""
@@ -23,20 +22,17 @@ class RegistrationViewModel: ObservableObject {
     @Published var wantsSMSNotifications: Bool = false
     @Published var showNumberConfirmation: Bool = false
 
-    // Enum для пола
     enum Gender: String {
         case male = "Мужской"
         case female = "Женский"
     }
 
-    // Логика регистрации пользователя
     func registerUser() {
         let birthDate = "\(selection ?? "") \(selection1 ?? "") \(selection2 ?? "")"
         let gender = selectedGender?.rawValue ?? ""
 
         AuthManager.shared.prepareUserRegistration(
             phoneNumber: phoneNumber,
-            password: password,
             name: userName,
             surname: userSurname,
             birthDate: birthDate,

@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		030025CB2B3196F700EC51BE /* NumberConfirmation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 030025CA2B3196F700EC51BE /* NumberConfirmation.swift */; };
 		0317606C2C0DF5450016EF83 /* ErrorHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0317606B2C0DF5450016EF83 /* ErrorHandler.swift */; };
+		0330F9E02C11F5D90067BF2C /* PasswordReset.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0330F9DF2C11F5D90067BF2C /* PasswordReset.swift */; };
 		033D2BD02BC7FD0900CF55FB /* CustomNavigationBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 033D2BCF2BC7FD0900CF55FB /* CustomNavigationBar.swift */; };
 		033D2BD42BC814C800CF55FB /* Rubik-Black.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 033D2BD32BC814C800CF55FB /* Rubik-Black.ttf */; };
 		033D2BD62BC814CE00CF55FB /* Rubik-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 033D2BD52BC814CE00CF55FB /* Rubik-Bold.ttf */; };
@@ -21,7 +22,6 @@
 		033F38CC2C04D2CC00DD9DB1 /* RegistrationStruct.swift in Sources */ = {isa = PBXBuildFile; fileRef = 033F38CB2C04D2CC00DD9DB1 /* RegistrationStruct.swift */; };
 		0342814F2BD44E5D00C73D49 /* RubikOne-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0342814E2BD44E5D00C73D49 /* RubikOne-Regular.ttf */; };
 		03464BFC2C0CBDDE00CA4E36 /* CustomAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03464BFB2C0CBDDE00CA4E36 /* CustomAlert.swift */; };
-		034E99452C075A2B003F2DB9 /* OTP.swift in Sources */ = {isa = PBXBuildFile; fileRef = 034E99442C075A2B003F2DB9 /* OTP.swift */; };
 		036376FE2C090498007FF560 /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = 036376FD2C090498007FF560 /* FirebaseAnalytics */; };
 		036377002C090498007FF560 /* FirebaseAnalyticsOnDeviceConversion in Frameworks */ = {isa = PBXBuildFile; productRef = 036376FF2C090498007FF560 /* FirebaseAnalyticsOnDeviceConversion */; };
 		036377022C090498007FF560 /* FirebaseAnalyticsSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 036377012C090498007FF560 /* FirebaseAnalyticsSwift */; };
@@ -114,6 +114,7 @@
 /* Begin PBXFileReference section */
 		030025CA2B3196F700EC51BE /* NumberConfirmation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NumberConfirmation.swift; sourceTree = "<group>"; };
 		0317606B2C0DF5450016EF83 /* ErrorHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorHandler.swift; sourceTree = "<group>"; };
+		0330F9DF2C11F5D90067BF2C /* PasswordReset.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PasswordReset.swift; sourceTree = "<group>"; };
 		033D2BCF2BC7FD0900CF55FB /* CustomNavigationBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomNavigationBar.swift; sourceTree = "<group>"; };
 		033D2BD32BC814C800CF55FB /* Rubik-Black.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Rubik-Black.ttf"; sourceTree = "<group>"; };
 		033D2BD52BC814CE00CF55FB /* Rubik-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Rubik-Bold.ttf"; sourceTree = "<group>"; };
@@ -126,7 +127,6 @@
 		033F38CB2C04D2CC00DD9DB1 /* RegistrationStruct.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegistrationStruct.swift; sourceTree = "<group>"; };
 		0342814E2BD44E5D00C73D49 /* RubikOne-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "RubikOne-Regular.ttf"; sourceTree = "<group>"; };
 		03464BFB2C0CBDDE00CA4E36 /* CustomAlert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomAlert.swift; sourceTree = "<group>"; };
-		034E99442C075A2B003F2DB9 /* OTP.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OTP.swift; sourceTree = "<group>"; };
 		0362157E2B405F1300C67C97 /* KanzlerFirstTry.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = KanzlerFirstTry.entitlements; sourceTree = "<group>"; };
 		036DC4972B11368400FB41BC /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		036DC4D22B11CEF400FB41BC /* SignIn.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignIn.swift; sourceTree = "<group>"; };
@@ -262,10 +262,10 @@
 			children = (
 				033F38C42C04CCB300DD9DB1 /* Registration */,
 				036DC4D22B11CEF400FB41BC /* SignIn.swift */,
+				0330F9DF2C11F5D90067BF2C /* PasswordReset.swift */,
 				03464BFB2C0CBDDE00CA4E36 /* CustomAlert.swift */,
 				03A6BF822B2F5430009CCDDC /* DropDown.swift */,
 				030025CA2B3196F700EC51BE /* NumberConfirmation.swift */,
-				034E99442C075A2B003F2DB9 /* OTP.swift */,
 			);
 			path = Authentication;
 			sourceTree = "<group>";
@@ -582,7 +582,6 @@
 				03A6BF832B2F5430009CCDDC /* DropDown.swift in Sources */,
 				039E40482B07A849007F4875 /* ContentView.swift in Sources */,
 				033F38C62C04CD0400DD9DB1 /* RegistrationModel.swift in Sources */,
-				034E99452C075A2B003F2DB9 /* OTP.swift in Sources */,
 				033F38CC2C04D2CC00DD9DB1 /* RegistrationStruct.swift in Sources */,
 				03B311782B388FC900F97551 /* HomeView.swift in Sources */,
 				036DC4D32B11CEF400FB41BC /* SignIn.swift in Sources */,
@@ -593,6 +592,7 @@
 				03DCE1182B5EF0A50064B78A /* TabView.swift in Sources */,
 				03A8B8182BDBA778009DEA44 /* MarketViewModel.swift in Sources */,
 				039E40462B07A849007F4875 /* KanzlerFirstTryApp.swift in Sources */,
+				0330F9E02C11F5D90067BF2C /* PasswordReset.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -8,9 +8,6 @@
 import Foundation
 import FirebaseAuth
 import FirebaseFirestore
-import UIKit
-import CoreImage.CIFilterBuiltins
-
 
 class AuthManager {
     static let shared = AuthManager()
@@ -19,7 +16,6 @@ class AuthManager {
     public var tempUserData: [String: Any]?
 
     public func startAuth(phoneNumber: String, completion: @escaping (Bool) -> Void) {
-        print("Starting phone number verification for: \(phoneNumber)")
         PhoneAuthProvider.provider().verifyPhoneNumber(phoneNumber, uiDelegate: nil) { [weak self] verificationId, error in
             if let error = error {
                 print("Ошибка отправки SMS: \(error.localizedDescription)")
@@ -27,85 +23,69 @@ class AuthManager {
                 return
             }
             guard let verificationId = verificationId else {
-                print("Verification ID is nil")
                 completion(false)
                 return
             }
             self?.verificationId = verificationId
-            print("Verification ID received: \(verificationId)")
             completion(true)
         }
     }
 
     public func verifyCode(smsCode: String, completion: @escaping (Bool) -> Void) {
         guard let verificationId = verificationId else {
-            print("Verification ID is nil, cannot verify code")
             completion(false)
             return
         }
         let credential = PhoneAuthProvider.provider().credential(withVerificationID: verificationId, verificationCode: smsCode)
-        auth.signIn(with: credential) { result, error in
+        auth.signIn(with: credential) { [weak self] result, error in
             if let error = error {
-                print("Error during code verification: \(error.localizedDescription)")
+                print("Ошибка при верификации кода: \(error.localizedDescription)")
                 completion(false)
                 return
             }
-            print("Code verification successful")
-            completion(true)
+            
+            if let user = result?.user {
+                self?.checkUserExistence(user: user, completion: completion)
+            } else {
+                completion(false)
+            }
         }
     }
-
-    public func prepareUserRegistration(phoneNumber: String, password: String, name: String, surname: String, birthDate: String, gender: String) {
-        let email = "\(phoneNumber)@kanzlerapp.com"
-        tempUserData = [
-            "email": email,
-            "password": password,
-            "name": name,
-            "surname": surname,
-            "phoneNumber": phoneNumber,
-            "birthDate": birthDate,
-            "gender": gender
-        ]
+    
+    private func checkUserExistence(user: FirebaseAuth.User, completion: @escaping (Bool) -> Void) {
+        let db = Firestore.firestore()
+        db.collection("users").document(user.uid).getDocument { [weak self] document, error in
+            if let document = document, document.exists {
+                completion(true)
+            } else {
+                self?.registerUser(userData: self?.tempUserData ?? [:]) { success in
+                    completion(success)
+                }
+            }
+        }
     }
 
     public func registerUser(userData: [String: Any], completion: @escaping (Bool) -> Void) {
-        guard let email = userData["email"] as? String, let password = userData["password"] as? String else {
+        guard let userId = Auth.auth().currentUser?.uid else {
             completion(false)
             return
         }
-
-        auth.createUser(withEmail: email, password: password) { [weak self] authResult, error in
-            if let error = error {
-                print("Error during user registration: \(error.localizedDescription)")
-                completion(false)
-                return
-            }
-
-            guard let userId = authResult?.user.uid else {
-                completion(false)
-                return
-            }
-
-            var userData = userData
-            userData.removeValue(forKey: "email")
-            userData.removeValue(forKey: "password")
-
-            self?.saveUserData(userId: userId, userData: userData, completion: completion)
-        }
-    }
-
-    private func saveUserData(userId: String, userData: [String: Any], completion: @escaping (Bool) -> Void) {
+        
+        var userData = userData
+        userData.removeValue(forKey: "email")
+        userData.removeValue(forKey: "password")
+        
         let db = Firestore.firestore()
-        db.collection("users").document(userId).setData(userData) { error in
+        db.collection("users").document(userId).setData(userData) { [weak self] error in
             if let error = error {
-                print("Error saving user data: \(error.localizedDescription)")
+                print("Ошибка при сохранении данных пользователя: \(error.localizedDescription)")
                 completion(false)
             } else {
-                self.generateAndSaveQRCode(userId: userId, userData: userData, completion: completion)
+                self?.generateAndSaveQRCode(userId: userId, userData: userData, completion: completion)
             }
         }
     }
-
+    
     private func generateAndSaveQRCode(userId: String, userData: [String: Any], completion: @escaping (Bool) -> Void) {
         let qrData = "\(userId);\(userData["phoneNumber"] as? String ?? "")"
         let db = Firestore.firestore()
@@ -113,18 +93,14 @@ class AuthManager {
             completion(error == nil)
         }
     }
-
-    private func generateQRCodeImage(from string: String) -> UIImage? {
-        let data = Data(string.utf8)
-        let filter = CIFilter.qrCodeGenerator()
-        filter.setValue(data, forKey: "inputMessage")
-
-        if let outputImage = filter.outputImage?.transformed(by: CGAffineTransform(scaleX: 10, y: 10)) {
-            let context = CIContext()
-            if let cgImage = context.createCGImage(outputImage, from: outputImage.extent) {
-                return UIImage(cgImage: cgImage)
-            }
-        }
-        return nil
+    
+    public func prepareUserRegistration(phoneNumber: String, name: String, surname: String, birthDate: String, gender: String) {
+        tempUserData = [
+            "phoneNumber": phoneNumber,
+            "name": name,
+            "surname": surname,
+            "birthDate": birthDate,
+            "gender": gender
+        ]
     }
 }

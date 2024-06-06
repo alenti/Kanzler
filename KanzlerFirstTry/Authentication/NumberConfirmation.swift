@@ -11,10 +11,8 @@ struct NumberConfirmation: View {
     @Environment(\.presentationMode) var presentationMode
     @State private var otpText = ""
     @FocusState private var isKeyboardShowing: Bool
-   // @State private var shouldNavigateToHome = false
     @EnvironmentObject var userSession: UserSession
     
-
     var body: some View {
         GeometryReader { geometry in
             VStack {
@@ -27,7 +25,7 @@ struct NumberConfirmation: View {
                             .foregroundColor(.black)
                     }
                     .padding(.leading)
-
+                    
                     Spacer()
                 }
                 .overlay(
@@ -37,24 +35,25 @@ struct NumberConfirmation: View {
                     alignment: .center
                 )
                 .padding(.vertical, geometry.size.height * 0.03)
-
+                
                 Image("logoFirstView")
                     .resizable()
                     .aspectRatio(contentMode: .fit)
                     .frame(width: geometry.size.width * 0.8, height: geometry.size.height * 0.2)
-
-                Text("Введите код подтверждения из SMS-сообщения")
-                    .font(.custom("Rubik-light", size: geometry.size.width * 0.038))
+                
+                Text("Введите код из SMS-сообщения")
+                    .font(.custom("Rubik-light", size: max(geometry.size.width * 0.02, 19)))
                     .multilineTextAlignment(.center)
                     .padding()
                     .lineLimit(1)
-
+                    .padding(.top,geometry.size.height * 0.02)
+                
                 OTP(otpText: $otpText)
                     .padding(.bottom, geometry.size.height * 0.03)
-                    .padding(.top, geometry.size.height * 0.01)
-
+                    ///.padding(.top, geometry.size.height * 0.01)
+                
                 Spacer()
-
+                
                 Button(action: {
                     confirmCode()
                 }) {
@@ -69,11 +68,7 @@ struct NumberConfirmation: View {
                 }
                 .padding()
                 .disableWithOpacity(otpText.count < 6)
-
-//                NavigationLink(destination: ContentView(), isActive: $shouldNavigateToHome) {
-//                    EmptyView()
-//                }
-
+                
                 Button(action: {
                     resendCode()
                 }) {
@@ -89,24 +84,26 @@ struct NumberConfirmation: View {
             }
         }
     }
-
+    
     private func confirmCode() {
         let code = otpText
         AuthManager.shared.verifyCode(smsCode: code) { success in
             if success {
-                // Успешная верификация, регистрация пользователя и переход к MainTabView
                 if let tempUserData = AuthManager.shared.tempUserData {
                     AuthManager.shared.registerUser(userData: tempUserData) { registerSuccess in
                         DispatchQueue.main.async {
                             if registerSuccess {
                                 withAnimation {
                                     userSession.signIn()
-                                    //shouldNavigateToHome = true
                                 }
                             } else {
                                 print("Ошибка при регистрации пользователя")
                             }
                         }
+                    }
+                } else {
+                    DispatchQueue.main.async {
+                        userSession.signIn()
                     }
                 }
             } else {
@@ -114,9 +111,13 @@ struct NumberConfirmation: View {
             }
         }
     }
-
+    
     private func resendCode() {
-        // Логика для повторной отправки кода верификации
+        AuthManager.shared.startAuth(phoneNumber: AuthManager.shared.tempUserData?["phoneNumber"] as? String ?? "") { success in
+            if !success {
+                print("Ошибка при повторной отправке кода")
+            }
+        }
     }
 }
 

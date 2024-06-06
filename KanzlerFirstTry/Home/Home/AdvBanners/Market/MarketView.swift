@@ -17,11 +17,11 @@ struct MarketInfoView: View {
                     Spacer()
                     
                     Text(store.name)
-                        .font(.custom("Rubik", size: max(geometry.size.width * 0.04, 19))) // Адаптивный размер шрифта
+                        .font(.custom("Rubik", size: max(geometry.size.width * 0.04, 18))) // Адаптивный размер шрифта
                     Text(store.address)
-                        .font(.custom("Rubik-Light", size: max(geometry.size.width * 0.02, 16))) // Адаптивный размер шрифта
+                        .font(.custom("Rubik-Light", size: max(geometry.size.width * 0.02, 15))) // Адаптивный размер шрифта
                     Text(store.phone)
-                        .font(.custom("Rubik-Light", size: max(geometry.size.width * 0.02, 16))) // Адаптивный размер шрифта
+                        .font(.custom("Rubik-Light", size: max(geometry.size.width * 0.02, 15))) // Адаптивный размер шрифта
                         .padding(.bottom, -6)
                     
                     Rectangle()
@@ -32,9 +32,9 @@ struct MarketInfoView: View {
                     HStack {
                         Image(systemName: "clock")
                             .foregroundColor(Color(red: 0.2588, green: 1.0, blue: 0.0))
-                            .font(.system(size: max(geometry.size.width * 0.04, 19))) // Адаптивный размер шрифта
+                            .font(.system(size: max(geometry.size.width * 0.04, 18))) // Адаптивный размер шрифта
                         Text(store.hours)
-                            .font(.custom("Rubik-Light", size: max(geometry.size.width * 0.04, 19))) // Адаптивный размер шрифта
+                            .font(.custom("Rubik-Light", size: max(geometry.size.width * 0.04, 18))) // Адаптивный размер шрифта
                             .font(.caption)
                     }
                     .padding(.top,-6)
@@ -56,3 +56,4 @@ struct MarketInfoView: View {
 #Preview {
     HomeView(selectedTab: .constant(.home))
 }
+

@@ -20,10 +20,10 @@ struct BannerView: View {
                 .clipShape(RoundedRectangle(cornerRadius: 10))
                 .shadow(color: .red.opacity(0.25), radius: 0, x: 0, y: 0)
                 .frame(width: width, height: height) // Использование опциональных параметров
-                .padding(.bottom,6)
+                .padding(.bottom,7)
 
             Text(banner.title)
-                .font(.custom("Rubik-LightItalic", size: 20))
+                .font(.custom("Rubik-LightItalic", size: 16))
                 .padding(.horizontal, 7)
         }
     }
@@ -32,3 +32,4 @@ struct BannerView: View {
 #Preview {
     HomeView(selectedTab: .constant(.home))
 }
+
