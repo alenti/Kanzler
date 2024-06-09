@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import iPhoneNumberField
 
 struct RadioButton: View {
     var label: String
@@ -74,9 +75,10 @@ struct Checkbox: View {
 struct CustomTextField: View {
     var placeholder: String
     @Binding var text: String
-    var isSecure: Bool = false
+    var isPhone: Bool = false
     var isNumberOnly: Bool = false
-
+    @FocusState private var isKeyboardShowing: Bool
+    
     var body: some View {
         ZStack(alignment: .leading) {
             if text.isEmpty {
@@ -85,27 +87,26 @@ struct CustomTextField: View {
                     .foregroundColor(.gray)
                     .padding(.horizontal, 25)
             }
-            if isSecure {
-                SecureField("", text: $text)
-                    .font(.custom("Rubik-light", size: 19))
-                    .foregroundColor(.black)
+            if isPhone {
+                iPhoneNumberField("+996", text: $text)
+                    .defaultRegion("KG")
+                    .font(UIFont(size: 21, weight: .medium))
+                    .prefixHidden(false)
+                    .flagHidden(false)
+                    .maximumDigits(20)
+                    .foregroundColor(Color.black)
                     .padding(.horizontal, 25)
                     .cornerRadius(5)
+                    .keyboardType(.phonePad)
+                    .focused($isKeyboardShowing)
             } else {
                 TextField("", text: $text)
-                    .font(.custom("Rubik-light", size: 19))
+                    .font(.custom("Rubik", size: 19))
                     .foregroundColor(.black)
                     .padding(.horizontal, 25)
                     .cornerRadius(5)
                     .keyboardType(isNumberOnly ? .phonePad : .default)
-//                    .onChange(of: text) { newValue in
-//                        if isNumberOnly {
-//                            let filtered = newValue.filter { "0123456789+".contains($0) }
-//                            if filtered != newValue {
-//                                text = filtered
-//                            }
-//                        }
-//                    }
+                    .focused($isKeyboardShowing)
             }
         }
         .padding(.bottom, 38)
@@ -117,11 +118,6 @@ struct CustomTextField: View {
         )
     }
 }
-
-#Preview {
-    Registration()
-}
-
 
 #Preview {
     Registration()

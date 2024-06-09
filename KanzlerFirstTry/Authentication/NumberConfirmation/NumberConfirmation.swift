@@ -12,6 +12,9 @@ struct NumberConfirmation: View {
     @State private var otpText = ""
     @FocusState private var isKeyboardShowing: Bool
     @EnvironmentObject var userSession: UserSession
+    @StateObject private var errorHandler = ErrorHandler()
+    
+    @State private var isLoading = false
     
     var body: some View {
         GeometryReader { geometry in
@@ -50,11 +53,12 @@ struct NumberConfirmation: View {
                 
                 OTP(otpText: $otpText)
                     .padding(.bottom, geometry.size.height * 0.03)
-                    ///.padding(.top, geometry.size.height * 0.01)
+                ///.padding(.top, geometry.size.height * 0.01)
                 
                 Spacer()
                 
                 Button(action: {
+                    UIApplication.shared.hideKeyboard()
                     confirmCode()
                 }) {
                     Text("Далее")
@@ -82,40 +86,62 @@ struct NumberConfirmation: View {
             .onTapGesture {
                 UIApplication.shared.hideKeyboard()
             }
+            .customAlert(alert: $errorHandler.alert)
+            
+            if isLoading {
+                LoadingView()
+                    .transition(.opacity)
+            }
         }
     }
     
     private func confirmCode() {
         let code = otpText
+        withAnimation {
+                    isLoading = true
+                }
         AuthManager.shared.verifyCode(smsCode: code) { success in
+            withAnimation {
+                            isLoading = false
+                        }
             if success {
                 if let tempUserData = AuthManager.shared.tempUserData {
+                    withAnimation {
+                                            isLoading = true
+                                        }
                     AuthManager.shared.registerUser(userData: tempUserData) { registerSuccess in
                         DispatchQueue.main.async {
+                            withAnimation {
+                                                            isLoading = false
+                                                        }
                             if registerSuccess {
                                 withAnimation {
                                     userSession.signIn()
                                 }
                             } else {
-                                print("Ошибка при регистрации пользователя")
+                                errorHandler.handleCustomError("Ошибка при регистрации пользователя")
                             }
                         }
                     }
-                } else {
+                    
+                }
+                else {
                     DispatchQueue.main.async {
                         userSession.signIn()
                     }
                 }
-            } else {
-                print("Ошибка верификации кода")
+            }
+            
+            else {
+                errorHandler.handleCustomError("Неверный код из SMS")
             }
         }
     }
     
     private func resendCode() {
-        AuthManager.shared.startAuth(phoneNumber: AuthManager.shared.tempUserData?["phoneNumber"] as? String ?? "") { success in
+        AuthManager.shared.resendCode { success in
             if !success {
-                print("Ошибка при повторной отправке кода")
+                errorHandler.handleCustomError("Ошибка при повторной отправке кода")
             }
         }
     }
@@ -153,7 +179,7 @@ struct OTP: View {
         .frame(maxHeight: .infinity, alignment: .top)
         .toolbar {
             ToolbarItem(placement: .keyboard) {
-                Button("Done") {
+                Button("Свернуть") {
                     isKeyboardShowing.toggle()
                 }
                 .frame(maxWidth: .infinity, alignment: .trailing)

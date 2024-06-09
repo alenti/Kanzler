@@ -47,6 +47,7 @@ struct DropDown: View {
                     withAnimation(.snappy) {
                         showOptions.toggle()
                     }
+                    UIApplication.shared.hideKeyboard()
                 }
                 .zIndex(10)
                 
@@ -102,6 +103,7 @@ struct DropDown: View {
                             selection = option
                             showOptions = false
                         }
+                        UIApplication.shared.hideKeyboard()
                     }
                 }
             }

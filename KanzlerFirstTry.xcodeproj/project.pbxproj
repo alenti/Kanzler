@@ -10,6 +10,8 @@
 		030025CB2B3196F700EC51BE /* NumberConfirmation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 030025CA2B3196F700EC51BE /* NumberConfirmation.swift */; };
 		0317606C2C0DF5450016EF83 /* ErrorHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0317606B2C0DF5450016EF83 /* ErrorHandler.swift */; };
 		0330F9E02C11F5D90067BF2C /* PasswordReset.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0330F9DF2C11F5D90067BF2C /* PasswordReset.swift */; };
+		0330F9E62C1390E90067BF2C /* iPhoneNumberField in Frameworks */ = {isa = PBXBuildFile; productRef = 0330F9E52C1390E90067BF2C /* iPhoneNumberField */; };
+		0330F9E82C139B690067BF2C /* PhoneNumber.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0330F9E72C139B690067BF2C /* PhoneNumber.swift */; };
 		033D2BD02BC7FD0900CF55FB /* CustomNavigationBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 033D2BCF2BC7FD0900CF55FB /* CustomNavigationBar.swift */; };
 		033D2BD42BC814C800CF55FB /* Rubik-Black.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 033D2BD32BC814C800CF55FB /* Rubik-Black.ttf */; };
 		033D2BD62BC814CE00CF55FB /* Rubik-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 033D2BD52BC814CE00CF55FB /* Rubik-Bold.ttf */; };
@@ -106,6 +108,7 @@
 		03B311752B38670800F97551 /* AuthManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03B311742B38670800F97551 /* AuthManager.swift */; };
 		03B311782B388FC900F97551 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03B311772B388FC900F97551 /* HomeView.swift */; };
 		03B6792E2BFBB566002581F9 /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 03B6792D2BFBB566002581F9 /* Launch Screen.storyboard */; };
+		03BBE3C32C15FD4500083736 /* TestView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03BBE3C22C15FD4500083736 /* TestView.swift */; };
 		03DCE1182B5EF0A50064B78A /* TabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03DCE1172B5EF0A50064B78A /* TabView.swift */; };
 		03DCE11A2B629F510064B78A /* QR-CodeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03DCE1192B629F510064B78A /* QR-CodeView.swift */; };
 		03DCE11C2B629F670064B78A /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 03DCE11B2B629F670064B78A /* ProfileView.swift */; };
@@ -115,6 +118,7 @@
 		030025CA2B3196F700EC51BE /* NumberConfirmation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NumberConfirmation.swift; sourceTree = "<group>"; };
 		0317606B2C0DF5450016EF83 /* ErrorHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorHandler.swift; sourceTree = "<group>"; };
 		0330F9DF2C11F5D90067BF2C /* PasswordReset.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PasswordReset.swift; sourceTree = "<group>"; };
+		0330F9E72C139B690067BF2C /* PhoneNumber.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhoneNumber.swift; sourceTree = "<group>"; };
 		033D2BCF2BC7FD0900CF55FB /* CustomNavigationBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomNavigationBar.swift; sourceTree = "<group>"; };
 		033D2BD32BC814C800CF55FB /* Rubik-Black.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Rubik-Black.ttf"; sourceTree = "<group>"; };
 		033D2BD52BC814CE00CF55FB /* Rubik-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Rubik-Bold.ttf"; sourceTree = "<group>"; };
@@ -153,6 +157,7 @@
 		03B311742B38670800F97551 /* AuthManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthManager.swift; sourceTree = "<group>"; };
 		03B311772B388FC900F97551 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 		03B6792D2BFBB566002581F9 /* Launch Screen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
+		03BBE3C22C15FD4500083736 /* TestView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestView.swift; sourceTree = "<group>"; };
 		03DCE1172B5EF0A50064B78A /* TabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabView.swift; sourceTree = "<group>"; };
 		03DCE1192B629F510064B78A /* QR-CodeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "QR-CodeView.swift"; sourceTree = "<group>"; };
 		03DCE11B2B629F670064B78A /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
@@ -184,6 +189,7 @@
 				036DC4CD2B1137F600FB41BC /* FirebaseRemoteConfigSwift in Frameworks */,
 				039A8BC92C08FDA7000EC42F /* FirebaseStorageCombine-Community in Frameworks */,
 				039A8BAD2C08FDA7000EC42F /* FirebaseFirestore in Frameworks */,
+				0330F9E62C1390E90067BF2C /* iPhoneNumberField in Frameworks */,
 				039A8B972C08FDA7000EC42F /* FirebaseAnalyticsOnDeviceConversion in Frameworks */,
 				036DC4BF2B1137F600FB41BC /* FirebaseInAppMessaging-Beta in Frameworks */,
 				039A8B952C08FDA7000EC42F /* FirebaseAnalytics in Frameworks */,
@@ -230,6 +236,34 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		0330F9E12C11FC050067BF2C /* SignIn */ = {
+			isa = PBXGroup;
+			children = (
+				0330F9DF2C11F5D90067BF2C /* PasswordReset.swift */,
+				036DC4D22B11CEF400FB41BC /* SignIn.swift */,
+				03BBE3C22C15FD4500083736 /* TestView.swift */,
+			);
+			path = SignIn;
+			sourceTree = "<group>";
+		};
+		0330F9E22C11FC330067BF2C /* HelpingFunctions */ = {
+			isa = PBXGroup;
+			children = (
+				033F38C22C04958C00DD9DB1 /* HelpingFunctions.swift */,
+				03464BFB2C0CBDDE00CA4E36 /* CustomAlert.swift */,
+				03A6BF822B2F5430009CCDDC /* DropDown.swift */,
+			);
+			path = HelpingFunctions;
+			sourceTree = "<group>";
+		};
+		0330F9E32C11FC5C0067BF2C /* NumberConfirmation */ = {
+			isa = PBXGroup;
+			children = (
+				030025CA2B3196F700EC51BE /* NumberConfirmation.swift */,
+			);
+			path = NumberConfirmation;
+			sourceTree = "<group>";
+		};
 		033F38C42C04CCB300DD9DB1 /* Registration */ = {
 			isa = PBXGroup;
 			children = (
@@ -261,11 +295,8 @@
 			isa = PBXGroup;
 			children = (
 				033F38C42C04CCB300DD9DB1 /* Registration */,
-				036DC4D22B11CEF400FB41BC /* SignIn.swift */,
-				0330F9DF2C11F5D90067BF2C /* PasswordReset.swift */,
-				03464BFB2C0CBDDE00CA4E36 /* CustomAlert.swift */,
-				03A6BF822B2F5430009CCDDC /* DropDown.swift */,
-				030025CA2B3196F700EC51BE /* NumberConfirmation.swift */,
+				0330F9E12C11FC050067BF2C /* SignIn */,
+				0330F9E32C11FC5C0067BF2C /* NumberConfirmation */,
 			);
 			path = Authentication;
 			sourceTree = "<group>";
@@ -320,12 +351,13 @@
 				03B6792D2BFBB566002581F9 /* Launch Screen.storyboard */,
 				036DC4972B11368400FB41BC /* GoogleService-Info.plist */,
 				039E40492B07A84B007F4875 /* Assets.xcassets */,
-				033F38C22C04958C00DD9DB1 /* HelpingFunctions.swift */,
-				0378736C2B07D9390064684D /* Fonts */,
+				0330F9E22C11FC330067BF2C /* HelpingFunctions */,
 				036DC4D82B11D05B00FB41BC /* Authentication */,
 				03B311742B38670800F97551 /* AuthManager.swift */,
 				033D2BDB2BC99D3800CF55FB /* UserSession.swift */,
 				0317606B2C0DF5450016EF83 /* ErrorHandler.swift */,
+				0330F9E72C139B690067BF2C /* PhoneNumber.swift */,
+				0378736C2B07D9390064684D /* Fonts */,
 				039E404B2B07A84B007F4875 /* Preview Content */,
 			);
 			path = KanzlerFirstTry;
@@ -494,6 +526,7 @@
 				036377032C090498007FF560 /* FirebaseAnalyticsWithoutAdIdSupport */,
 				036377052C090498007FF560 /* FirebaseAppCheck */,
 				036377072C090498007FF560 /* FirebaseAppDistribution-Beta */,
+				0330F9E52C1390E90067BF2C /* iPhoneNumberField */,
 			);
 			productName = KanzlerFirstTry;
 			productReference = 039E40422B07A849007F4875 /* KanzlerFirstTry.app */;
@@ -526,6 +559,7 @@
 			mainGroup = 039E40392B07A849007F4875;
 			packageReferences = (
 				036DC49B2B1137F600FB41BC /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+				0330F9E42C1390E90067BF2C /* XCRemoteSwiftPackageReference "iPhoneNumberField" */,
 			);
 			productRefGroup = 039E40432B07A849007F4875 /* Products */;
 			projectDirPath = "";
@@ -577,6 +611,7 @@
 				033F38C82C04CD8100DD9DB1 /* RegistrationViewModel.swift in Sources */,
 				03A8B81A2BDBA91A009DEA44 /* MarketView.swift in Sources */,
 				033D2BDC2BC99D3800CF55FB /* UserSession.swift in Sources */,
+				0330F9E82C139B690067BF2C /* PhoneNumber.swift in Sources */,
 				03B311752B38670800F97551 /* AuthManager.swift in Sources */,
 				030025CB2B3196F700EC51BE /* NumberConfirmation.swift in Sources */,
 				03A6BF832B2F5430009CCDDC /* DropDown.swift in Sources */,
@@ -585,6 +620,7 @@
 				033F38CC2C04D2CC00DD9DB1 /* RegistrationStruct.swift in Sources */,
 				03B311782B388FC900F97551 /* HomeView.swift in Sources */,
 				036DC4D32B11CEF400FB41BC /* SignIn.swift in Sources */,
+				03BBE3C32C15FD4500083736 /* TestView.swift in Sources */,
 				03DCE11C2B629F670064B78A /* ProfileView.swift in Sources */,
 				03A8B8062BD6A4DF009DEA44 /* StoryViewModel.swift in Sources */,
 				033F38C32C04958C00DD9DB1 /* HelpingFunctions.swift in Sources */,
@@ -736,6 +772,7 @@
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = "Launch Screen.storyboard";
+				INFOPLIST_KEY_UIRequiresFullScreen = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -771,6 +808,7 @@
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = "Launch Screen.storyboard";
+				INFOPLIST_KEY_UIRequiresFullScreen = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -812,6 +850,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		0330F9E42C1390E90067BF2C /* XCRemoteSwiftPackageReference "iPhoneNumberField" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/MojtabaHs/iPhoneNumberField";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.10.4;
+			};
+		};
 		036DC49B2B1137F600FB41BC /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
@@ -823,6 +869,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		0330F9E52C1390E90067BF2C /* iPhoneNumberField */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 0330F9E42C1390E90067BF2C /* XCRemoteSwiftPackageReference "iPhoneNumberField" */;
+			productName = iPhoneNumberField;
+		};
 		036376FD2C090498007FF560 /* FirebaseAnalytics */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 036DC49B2B1137F600FB41BC /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
