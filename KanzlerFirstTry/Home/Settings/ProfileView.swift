@@ -8,39 +8,60 @@ import SwiftUI
 import FirebaseAuth
 
 struct ProfileView: View {
-    let user = User(name: "Василий Петров", phoneNumber: "+996 (555) 77-66-55", bonusPoints: 150, discount: 5)
-    let menuItems = [
-        MenuItem(icon: "clock.arrow.circlepath", title: "История покупок"),
-        MenuItem(icon: "gear", title: "Настройки"),
-        MenuItem(icon: "bell", title: "Уведомления"),
-        MenuItem(icon: "star", title: "Бонусная программа"),
-        MenuItem(icon: "questionmark.circle", title: "Поддержка")
-    ]
-    
+    @StateObject var viewModel = ProfileViewModel()
     @StateObject var marketsViewModel = MarketViewModel()
     @EnvironmentObject var userSession: UserSession
     @State private var showLogoutAlert = false
 
     var body: some View {
         NavigationView {
-            VStack(spacing: 0) {
-                CustomNavigationBar(title: "Профиль", isCentered: false)
-                ScrollView {
-                    VStack(alignment: .leading, spacing: 0) {
-                        ProfileHeaderView(user: user)
-                            .padding(.top, 10)
-                        BonusCashbackView(bonusPoints: user.bonusPoints, discount: user.discount)
-                        SettingsMenuView(menuItems: menuItems)
-                        StoreScrollView()
-                            .environmentObject(marketsViewModel)
-                            .padding(.vertical)
-                        LogoutButton {
-                            showLogoutAlert = true
+            GeometryReader { geometry in
+                ZStack {
+                    VStack(spacing: 0) {
+                        CustomNavigationBar(title: "Профиль", isCentered: false)
+                        ScrollView {
+                            VStack(alignment: .leading, spacing: 0) {
+                                if let user = viewModel.user {
+                                    // Профиль пользователя
+                                    VStack(alignment: .leading, spacing: 0) {
+                                        ProfileHeaderView(user: user)
+                                            .padding(.top, 10)
+                                        BonusCashbackView(bonusPoints: user.bonusPoints, discount: user.discount)
+                                        SettingsMenuView(menuItems: menuItems)
+                                        StoreScrollView()
+                                            .environmentObject(marketsViewModel)
+                                            .padding(.vertical)
+                                        LogoutButton {
+                                            showLogoutAlert = true
+                                        }
+                                        .padding(.bottom, 30)
+                                    }
+                                } else if let errorMessage = viewModel.errorMessage {
+                                    // Отображение сообщения об ошибке
+                                    Text(errorMessage)
+                                        .foregroundColor(.red)
+                                } else {
+                                    // Пустое представление, если данные еще не загружены
+                                    VStack(alignment: .leading, spacing: 0) {
+                                        ProfileHeaderView(user: UserData.placeholder)
+                                            .padding(.top, 10)
+                                        BonusCashbackView(bonusPoints: 0, discount: 0)
+                                        SettingsMenuView(menuItems: menuItems)
+                                        StoreScrollView()
+                                            .environmentObject(marketsViewModel)
+                                            .padding(.vertical)
+                                        LogoutButton {
+                                            showLogoutAlert = true
+                                        }
+                                        .padding(.bottom, 30)
+                                    }
+                                    .redacted(reason: .placeholder)
+                                }
+                            }
                         }
-                        .padding(.bottom, 30)
+                        .background(Color(.systemGray6))
                     }
                 }
-                .background(Color(.systemGray6))
             }
         }
         .alert(isPresented: $showLogoutAlert) {
@@ -52,16 +73,30 @@ struct ProfileView: View {
                 secondaryButton: .cancel(Text("Остаться"))
             )
         }
+        .onAppear {
+            if let uid = userSession.userID {
+                viewModel.fetchUserData(uid: uid)
+            }
+        }
     }
+
+    private let menuItems = [
+        MenuItem(icon: "clock.arrow.circlepath", title: "История покупок"),
+        MenuItem(icon: "gear", title: "Настройки"),
+        MenuItem(icon: "bell", title: "Уведомления"),
+        MenuItem(icon: "star", title: "Бонусная программа"),
+        MenuItem(icon: "questionmark.circle", title: "Поддержка")
+    ]
 }
+
 
 // Header View с информацией о пользователе
 struct ProfileHeaderView: View {
-    let user: User
+    let user: UserData
     
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
-            Text(user.name)
+            Text("\(user.name) \(user.surname)")
                 .font(.title2).bold()
             Text(user.phoneNumber)
                 .foregroundColor(.secondary)
@@ -198,27 +233,11 @@ struct LogoutButton: View {
     }
 }
 
-// Модели данных
-struct User {
-    let name: String
-    let phoneNumber: String
-    let bonusPoints: Int
-    let discount: Int
-}
-
 struct MenuItem: Identifiable, Hashable {
     let id = UUID()
     let icon: String
     let title: String
 }
-
-//struct StoreInfo: Identifiable {
-//    let id = UUID()
-//    let name: String
-//    let address: String
-//    let phone: String
-//    let hours: String
-//}
 
 #Preview {
     ProfileView()

@@ -21,6 +21,7 @@ struct BannerView: View {
                 .shadow(color: .red.opacity(0.25), radius: 0, x: 0, y: 0)
                 .frame(width: width, height: height) // Использование опциональных параметров
                 .padding(.bottom,7)
+                .padding(.horizontal,5)
 
             Text(banner.title)
                 .font(.custom("Rubik-LightItalic", size: 16))

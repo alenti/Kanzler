@@ -32,13 +32,13 @@ struct BannersListView: View {
                         ForEach(banners) { promotion in
                             BannerView(banner: promotion)
                                 .frame(maxHeight: .infinity)
-                            //.frame (width:260,height: 140)
                                 .onTapGesture {
                                     // Обработка нажатия на баннер
                                 }
                                 .frame(maxWidth:.infinity)
                         }
                     }
+                    .padding(.top)
                     .padding(.horizontal)
                 }
                 .scrollTargetLayout()

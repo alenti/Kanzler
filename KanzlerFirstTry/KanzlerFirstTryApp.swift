@@ -73,13 +73,36 @@ struct KanzlerFirstTryApp: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
     @StateObject var userSession = UserSession()
     
+    @State private var showSplashScreen = true
+    @State private var splashScreenOpacity = 1.0
+    
     var body: some Scene {
         WindowGroup {
-            NavigationView {
-                ContentView()
-                    .environmentObject(userSession)
-                    .preferredColorScheme(.light)
+            ZStack {
+                NavigationView {
+                    ContentView()
+                        .environmentObject(userSession)
+                        .preferredColorScheme(.light)
+                }
+                
+                if showSplashScreen {
+                    SplashScreenView()
+                        .opacity(splashScreenOpacity)
+                        .transition(.opacity)
+                        .onAppear {
+                            // Добавление задержки перед началом анимации
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
+                                withAnimation(.easeInOut(duration: 2.0)) {
+                                    splashScreenOpacity = 0.0
+                                }
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
+                                    showSplashScreen = false
+                                }
+                            }
+                        }
+                }
             }
         }
     }
 }
+

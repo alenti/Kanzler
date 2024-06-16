@@ -48,7 +48,10 @@ class RegistrationViewModel: ObservableObject {
                         name: self.userName,
                         surname: self.userSurname,
                         birthDate: birthDate,
-                        gender: gender
+                        gender: gender,
+                        isAgreeWithTerms: self.isAgreeWithTerms,
+                        isConsentToDataProcessing: self.isConsentToDataProcessing,
+                        wantsSMSNotifications: self.wantsSMSNotifications
                     )
 
                     AuthManager.shared.startAuth(phoneNumber: self.phoneNumber) { success in

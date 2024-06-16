@@ -8,139 +8,142 @@
 import SwiftUI
 
 struct HomeView: View {
-    
     @Binding var selectedTab: MainTabView.Tab
     
     @StateObject var storyData = StoryViewModel()
-    
     @StateObject var bannersViewModel = BannersViewModel()
-    
     @StateObject var marketsViewModel = MarketViewModel()
+    @StateObject var userViewModel = UserViewModel()
+    @EnvironmentObject var userSession: UserSession
     
-        
     @State private var isShowingInterestingList = false
     @State private var isShowingPromotionsList = false
-    
-    
+    @State private var scrollOffset: CGFloat = 0.0
     
     var body: some View {
         NavigationView {
-            ZStack {
-                VStack(spacing: 0) {
-                    CustomNavigationBar(title: "Привет,Роман",isCentered: false)
-                    ScrollView() {
-                        StoriesView(storyData: storyData)
-                        
-                        BonusCardView(selectedTab: $selectedTab)
-                            .padding(.horizontal)
-                            .padding(.bottom,17)
-                        
-                        
-                        BlockHeader(HeaderName: "Интересное", onAllTapped: {
-                            isShowingInterestingList = true
-                        })
-                        .sheet(isPresented: $isShowingInterestingList) {
-                            BannersListView(viewModel: bannersViewModel, headerName: "Интересное")
-                        }
-                                   
-            
-                        InterestingSectionView()
-                            .environmentObject(bannersViewModel)
-                        
-                            .padding(.bottom,20)
-                        
-                        BlockHeader(HeaderName: "Акции",onAllTapped: {
-                            isShowingPromotionsList = true
-                        })
-                        .sheet(isPresented: $isShowingPromotionsList) {
-                            BannersListView(viewModel: bannersViewModel, headerName: "Акции")
-                        }
-                        
-                        
-                        PromotionsSectionView()
-                            .environmentObject(bannersViewModel)
-                        
-                            .padding(.bottom,20)
-                        
-                        BlockHeader(HeaderName: "Адреса магазинов",onAllTapped: {})
-                        
-                        StoreScrollView()
-                            .environmentObject(marketsViewModel)
-                        
-                        
-                            .padding(.bottom,10)
-                        
-                        SocialButtonsView()
-                            .padding(.bottom,100)
+            GeometryReader { geometry in
+                ZStack {
+                    VStack {
+                        Image("Background2")
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                            .frame(maxWidth: .infinity, maxHeight: .infinity)
+                            .edgesIgnoringSafeArea(.all)
                     }
-                    .background(Color(.systemGray6))
-//                    .background(
-//                        ZStack {
-//                           Color(.systemGray6)
-//                            
-//                            Image("Polygon 1")
-//                                .offset(x:160,y:-320)
-//                                .blur(radius: 1)
-//                            
-//                            Image("Ellipse 4")
-//                                .offset(x:-110,y:-120)
-//                                .blur(radius: 2)
-//                            
-//
-//                            Image("Ellipse 4")
-//                                .offset(x:200,y:200)
-//                                .blur(radius: 2)
-//
-//                        }
-//                        .frame(maxWidth: .infinity, maxHeight: .infinity)
-//                    )
-//                    .edgesIgnoringSafeArea(.all)
                     
-                    
+                    VStack(spacing: 0) {
+                        CustomNavigationBar(title: "Привет, \(userViewModel.user?.name ?? "")!", isCentered: false)
+                        ScrollView {
+                            GeometryReader { scrollGeometry in
+                                Color.clear
+                                    .preference(key: ScrollOffsetPreferenceKey.self, value: scrollGeometry.frame(in: .global).minY)
+                            }
+                            .frame(height: 0)
+                        
+                            StoriesView(storyData: storyData)
+                                .frame(height: geometry.size.height * 0.12) // Пример адаптивной высоты
+                        
+                            BonusCardView(selectedTab: $selectedTab, bonusPoints: userViewModel.user?.bonusPoints ?? 0)
+                                .padding(.horizontal, geometry.size.width * 0.04)
+                                .padding(.bottom, geometry.size.height * 0.05)
+                        
+                            BlockHeader(headerName: "Интересное", onAllTapped: {
+                                isShowingInterestingList = true
+                            })
+                            .sheet(isPresented: $isShowingInterestingList) {
+                                BannersListView(viewModel: bannersViewModel, headerName: "Интересное")
+                            }
+                            .padding(.horizontal, geometry.size.width * 0.01)
+                            .padding(.bottom, geometry.size.height * 0.018)
+                            
+                            InterestingSectionView()
+                                .environmentObject(bannersViewModel)
+                                .padding(.bottom, geometry.size.height * 0.02)
+                        
+                            BlockHeader(headerName: "Акции", onAllTapped: {
+                                isShowingPromotionsList = true
+                            })
+                            .sheet(isPresented: $isShowingPromotionsList) {
+                                BannersListView(viewModel: bannersViewModel, headerName: "Акции")
+                            }
+                            .padding(.horizontal, geometry.size.width * 0.01)
+                            .padding(.bottom, geometry.size.height * 0.018)
+                        
+                            PromotionsSectionView()
+                                .environmentObject(bannersViewModel)
+                                .padding(.bottom, geometry.size.height * 0.03)
+                        
+                            BlockHeader(headerName: "Адреса магазинов", onAllTapped: {})
+                                .padding(.horizontal, geometry.size.width * 0.01)
+                                .padding(.bottom, geometry.size.height * 0.018)
+                        
+                            StoreScrollView()
+                                .environmentObject(marketsViewModel)
+                                .padding(.bottom, geometry.size.height * 0.01)
+                                .padding(.horizontal, geometry.size.width * 0.01)
+                        
+                            SocialButtonsView()
+                                .padding(.bottom, geometry.size.height * 0.1)
+                                .padding(.horizontal, geometry.size.width * 0.02)
+                        }
+                        .onPreferenceChange(ScrollOffsetPreferenceKey.self) { value in
+                            self.scrollOffset = value
+                        }
+                    }
                 }
-                
-                
+                .fullScreenCover(isPresented: $storyData.showStory) {
+                    StoryOverlayView()
+                        .environmentObject(storyData)
+                }
             }
-            .fullScreenCover(isPresented: $storyData.showStory) {
-                StoryOverlayView()
-                    .environmentObject(storyData)
+            .background(Color(.systemGray6))
+        }
+        .onAppear {
+            if let uid = userSession.userID {
+                userViewModel.fetchUserData(uid: uid)
             }
-//            .overlay (
-//                StoryView()
-//                    .environmentObject(storyData)
-//            )
         }
     }
 }
 
+struct ScrollOffsetPreferenceKey: PreferenceKey {
+    typealias Value = CGFloat
+    static var defaultValue: Value = 0
+    static func reduce(value: inout Value, nextValue: () -> Value) {
+        value += nextValue()
+    }
+}
 
     
     // Заголовок блоков
-    struct BlockHeader: View {
-        var HeaderName: String
-        var onAllTapped: () -> Void  // Замыкание для обработки нажатия
-        
-        var body: some View {
+struct BlockHeader: View {
+    var headerName: String
+    var onAllTapped: () -> Void  // Замыкание для обработки нажатия
+    
+    var body: some View {
+        GeometryReader { geometry in
             HStack {
-                Text(HeaderName)
-                    .font(.custom("Rubik-SemiBold", size: 20))
+                Text(headerName)
+                    .font(.custom("Rubik", size: geometry.size.width * 0.045)) // Пример адаптивного размера шрифта
                 Spacer()
                 
                 HStack {
                     Text("Все")
-                        .font(.custom("RubikOne-Regular", size: 16))
+                        .font(.custom("Rubik-Light", size: geometry.size.width * 0.04)) // Пример адаптивного размера шрифта
                     
                     Image(systemName: "chevron.right")
                         .foregroundColor(.black)
-                        .font(Font.system(size: 16, weight: .light))
+                        .font(Font.system(size: geometry.size.width * 0.04, weight: .light)) // Пример адаптивного размера иконки
                 }
                 .onTapGesture {
                     onAllTapped()  // Вызов замыкания при нажатии
                 }
             }
-            .padding(.horizontal)
+            .padding(.horizontal, geometry.size.width * 0.05) // Пример адаптивного отступа
         }
     }
+}
     
     
     // оверлей на сторис
@@ -173,7 +176,9 @@ struct HomeView: View {
                         
                         
                     }
-                    .padding(.all,8)
+                    .padding(.horizontal,15)
+                    .padding(.top,8)
+                    .padding(.bottom,10)
                 }
 //                .overlay (
 //                    StoryView()
@@ -231,12 +236,13 @@ struct HomeView: View {
     /// QR CODE
 struct BonusCardView: View {
     @Binding var selectedTab: MainTabView.Tab
+    var bonusPoints: Int
     
     var body: some View {
         GeometryReader { geometry in
             RoundedRectangle(cornerRadius: 15)
                 .fill(Color(red: 1, green: 0.2, blue: 0.2))
-                .frame(height: geometry.size.width * 0.44) // Пропорциональная высота относительно ширины
+                .frame(height: geometry.size.width * 0.47) // Пропорциональная высота относительно ширины
                 .overlay(
                     VStack {
                         HStack {
@@ -246,7 +252,7 @@ struct BonusCardView: View {
                                     .foregroundColor(.white)
                                 
                                 HStack(alignment: .bottom) {
-                                    Text("150")
+                                    Text("\(bonusPoints)")
                                         .foregroundColor(.white)
                                         .font(.custom("Rubik-SemiBold", size: 40))
                                     
@@ -289,9 +295,9 @@ struct BonusCardView: View {
         
         var body: some View {
             ScrollView(.horizontal, showsIndicators: false) {
-                HStack(spacing: 15) {
+                HStack(spacing: 10) {
                     ForEach(viewModel.interesting) { interesting in
-                        BannerView(banner: interesting,width: 280,height: 130)
+                        BannerView(banner: interesting,width: 280,height: 166)
                             .onTapGesture {
                                 // Обработка нажатия на баннер
                             }
@@ -308,9 +314,9 @@ struct BonusCardView: View {
         
         var body: some View {
             ScrollView(.horizontal, showsIndicators: false) {
-                HStack(spacing: 15) {
+                HStack(spacing: 10) {
                     ForEach(viewModel.promotions) { promotion in
-                        BannerView(banner: promotion,width: 280,height: 130)
+                        BannerView(banner: promotion,width: 280,height: 166)
                             .onTapGesture {
                                 // Обработка нажатия на баннер
                             }

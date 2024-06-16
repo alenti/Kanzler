@@ -15,21 +15,19 @@
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="SplashScreen" translatesAutoresizingMaskIntoConstraints="NO" id="NeN-aM-adQ">
-                                <rect key="frame" x="33" y="301" width="327" height="250"/>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="SplashScreen" translatesAutoresizingMaskIntoConstraints="NO" id="FW0-Q5-jlS">
+                                <rect key="frame" x="19" y="226" width="355" height="400"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="250" id="50A-23-z1m"/>
-                                    <constraint firstAttribute="width" secondItem="NeN-aM-adQ" secondAttribute="height" multiplier="327:250" id="GzZ-Th-Ut6"/>
-                                    <constraint firstAttribute="width" secondItem="NeN-aM-adQ" secondAttribute="height" multiplier="327:250" id="gtt-5S-qDJ"/>
-                                    <constraint firstAttribute="width" constant="327" id="xUB-3u-Fzd"/>
+                                    <constraint firstAttribute="height" constant="400" id="rCI-uW-haD"/>
+                                    <constraint firstAttribute="width" constant="355" id="zER-8C-jzG"/>
                                 </constraints>
                             </imageView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="Bcu-3y-fUS"/>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstItem="NeN-aM-adQ" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="kfe-Ew-CZi"/>
-                            <constraint firstItem="NeN-aM-adQ" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" id="uMY-GS-5RD"/>
+                            <constraint firstItem="FW0-Q5-jlS" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="H5Q-kW-nlb"/>
+                            <constraint firstItem="FW0-Q5-jlS" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" id="rza-fN-sUn"/>
                         </constraints>
                     </view>
                 </viewController>
