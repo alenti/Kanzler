@@ -6,15 +6,18 @@
 //
 
 import SwiftUI
+import Firebase
 
 struct BannerModel: Identifiable {
     let id: UUID
-    let image: String
+    let imagePath: String
     let title: String
+    let timestamp: Timestamp
     
-    init(id: UUID = UUID(), image: String, title: String) {
+    init(id: UUID = UUID(), imagePath: String, title: String, timestamp: Timestamp) {
         self.id = id
-        self.image = image
+        self.imagePath = imagePath
         self.title = title
+        self.timestamp = timestamp
     }
 }

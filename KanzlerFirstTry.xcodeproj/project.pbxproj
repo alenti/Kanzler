@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		030025CB2B3196F700EC51BE /* NumberConfirmation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 030025CA2B3196F700EC51BE /* NumberConfirmation.swift */; };
 		0303953D2C1F499F007A36FB /* SDWebImageSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = 0303953C2C1F499F007A36FB /* SDWebImageSwiftUI */; };
+		0303953F2C21F962007A36FB /* MarketListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0303953E2C21F962007A36FB /* MarketListView.swift */; };
 		0317606C2C0DF5450016EF83 /* ErrorHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0317606B2C0DF5450016EF83 /* ErrorHandler.swift */; };
 		0330F9E02C11F5D90067BF2C /* PasswordReset.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0330F9DF2C11F5D90067BF2C /* PasswordReset.swift */; };
 		0330F9E62C1390E90067BF2C /* iPhoneNumberField in Frameworks */ = {isa = PBXBuildFile; productRef = 0330F9E52C1390E90067BF2C /* iPhoneNumberField */; };
@@ -121,6 +122,7 @@
 
 /* Begin PBXFileReference section */
 		030025CA2B3196F700EC51BE /* NumberConfirmation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NumberConfirmation.swift; sourceTree = "<group>"; };
+		0303953E2C21F962007A36FB /* MarketListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarketListView.swift; sourceTree = "<group>"; };
 		0317606B2C0DF5450016EF83 /* ErrorHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorHandler.swift; sourceTree = "<group>"; };
 		0330F9DF2C11F5D90067BF2C /* PasswordReset.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PasswordReset.swift; sourceTree = "<group>"; };
 		033D2BCF2BC7FD0900CF55FB /* CustomNavigationBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomNavigationBar.swift; sourceTree = "<group>"; };
@@ -427,6 +429,7 @@
 				03A8B80A2BDAD2C2009DEA44 /* BannerModel.swift */,
 				03A8B80E2BDAD353009DEA44 /* BannerViewModel.swift */,
 				03A8B8102BDB9195009DEA44 /* BannerView.swift */,
+				03A8B81C2BDBB944009DEA44 /* BannersListView.swift */,
 			);
 			path = Banner;
 			sourceTree = "<group>";
@@ -437,6 +440,7 @@
 				03A8B8152BDBA4FC009DEA44 /* MarketModel.swift */,
 				03A8B8172BDBA778009DEA44 /* MarketViewModel.swift */,
 				03A8B8192BDBA91A009DEA44 /* MarketView.swift */,
+				0303953E2C21F962007A36FB /* MarketListView.swift */,
 			);
 			path = Market;
 			sourceTree = "<group>";
@@ -446,7 +450,6 @@
 			children = (
 				03A8B8092BDAD28A009DEA44 /* Banner */,
 				03A8B8142BDBA4AC009DEA44 /* Market */,
-				03A8B81C2BDBB944009DEA44 /* BannersListView.swift */,
 			);
 			path = AdvBanners;
 			sourceTree = "<group>";
@@ -638,6 +641,7 @@
 				03B311782B388FC900F97551 /* HomeView.swift in Sources */,
 				036DC4D32B11CEF400FB41BC /* SignIn.swift in Sources */,
 				03BBE3C32C15FD4500083736 /* TestView.swift in Sources */,
+				0303953F2C21F962007A36FB /* MarketListView.swift in Sources */,
 				036AE34A2C1AE52C002EF6A3 /* UserViewModel.swift in Sources */,
 				03DCE11C2B629F670064B78A /* ProfileView.swift in Sources */,
 				03A8B8062BD6A4DF009DEA44 /* StoryViewModel.swift in Sources */,

@@ -198,13 +198,11 @@ struct StoreScrollView: View {
         ScrollView(.horizontal, showsIndicators: false) {
             HStack(spacing: 20) {
                 ForEach(viewModel.markets) { markets in
-                    MarketInfoView(store: markets)
-                        .onTapGesture {
-                            // Обработка нажатия на баннер
-                        }
+                    MarketInfoView(store: markets,width: 240,height: 115,useAdaptiveWidth:false)
                 }
             }
             .padding(.horizontal)
+            .padding(.leading,6)
         }
         .scrollTargetLayout()
     }

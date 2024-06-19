@@ -8,17 +8,20 @@
 import SwiftUI
 
 struct MarketModel: Identifiable {
-    let id : UUID
+    let id: UUID
     let name: String
     let address: String
     let phone: String
     let hours: String
+    let link: String
     
-    init(id: UUID = UUID(), name: String, address: String,phone: String, hours: String) {
+    init(id: UUID = UUID(), name: String, address: String, phone: String, hours: String, link: String) {
         self.id = id
         self.name = name
         self.address = address
         self.phone = phone
         self.hours = hours
+        self.link = link
     }
 }
+

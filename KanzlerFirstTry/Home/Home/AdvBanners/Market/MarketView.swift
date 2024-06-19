@@ -9,6 +9,9 @@ import SwiftUI
 
 struct MarketInfoView: View {
     let store: MarketModel
+    var width: CGFloat?
+    var height: CGFloat?
+    var useAdaptiveWidth: Bool
     
     var body: some View {
         VStack(alignment:.center) {
@@ -17,31 +20,32 @@ struct MarketInfoView: View {
                     Spacer()
                     
                     Text(store.name)
-                        .font(.custom("Rubik", size: max(geometry.size.width * 0.04, 16))) // Адаптивный размер шрифта
+                        .font(.custom("Rubik", size: (width ?? geometry.size.width) * 0.065)) // Адаптивный размер шрифта
                     Text(store.address)
-                        .font(.custom("Rubik-Light", size: max(geometry.size.width * 0.02, 13))) // Адаптивный размер шрифта
+                        .font(.custom("Rubik-Light", size: (width ?? geometry.size.width) * 0.055)) // Адаптивный размер шрифта
                     Text(store.phone)
-                        .font(.custom("Rubik-Light", size: max(geometry.size.width * 0.02, 13))) // Адаптивный размер шрифта
+                        .font(.custom("Rubik-Light", size: (width ?? geometry.size.width) * 0.055)) // Адаптивный размер шрифта
                         .padding(.bottom, -4)
                     
                     Rectangle()
                         .fill(Color(.systemGray2))
                         .frame(height: 1)
-                        .padding(.horizontal, geometry.size.width * 0.20)
+                        .padding(.horizontal, (width ?? geometry.size.width) * 0.18)
                     
                     HStack {
                         Image(systemName: "clock")
                             .foregroundColor(Color(red: 0.2588, green: 1.0, blue: 0.0))
-                            .font(.system(size: max(geometry.size.width * 0.04, 18))) // Адаптивный размер шрифта
+                            .font(.system(size: (width ?? geometry.size.width) * 0.07)) // Адаптивный размер шрифта
                         Text(store.hours)
-                            .font(.custom("Rubik-Light", size: max(geometry.size.width * 0.04, 15))) // Адаптивный размер шрифта
+                            .font(.custom("Rubik-Light", size: (width ?? geometry.size.width) * 0.06)) // Адаптивный размер шрифта
                             .font(.caption)
                     }
-                    .padding(.top,-4)
+                    .padding(.top, -4)
                     Spacer()
                 }
             }
-            .frame(width: 240, height: 115) // Фиксированный размер блока
+            .frame(width: useAdaptiveWidth ? nil : (width ?? 240), height: height ?? 115) // Установка размеров в зависимости от параметра
+            .frame(maxWidth: useAdaptiveWidth ? .infinity : nil) // Используем всю ширину, если нужно
             .background(Color.white)
             .cornerRadius(10)
             .overlay(
@@ -49,7 +53,11 @@ struct MarketInfoView: View {
                     .stroke(Color(red: 0.2588, green: 1.0, blue: 0.0), lineWidth: 2)
             )
         }
-        //.padding()
+        .onTapGesture {
+            if let url = URL(string: store.link) {
+                UIApplication.shared.open(url)
+            }
+        }
     }
 }
 

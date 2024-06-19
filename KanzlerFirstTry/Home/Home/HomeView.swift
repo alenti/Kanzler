@@ -6,6 +6,9 @@
 //
 
 import SwiftUI
+import FirebaseStorage
+import FirebaseFirestore
+import SDWebImageSwiftUI
 
 struct HomeView: View {
     @Binding var selectedTab: MainTabView.Tab
@@ -18,6 +21,7 @@ struct HomeView: View {
     
     @State private var isShowingInterestingList = false
     @State private var isShowingPromotionsList = false
+    @State private var isShowingMarketList = false
     @State private var scrollOffset: CGFloat = 0.0
     
     var body: some View {
@@ -42,7 +46,7 @@ struct HomeView: View {
                             .frame(height: 0)
                         
                             StoriesView(storyData: storyData)
-                                .frame(height: geometry.size.height * 0.12) // Пример адаптивной высоты
+                                .frame(height: geometry.size.height * 0.12)
                         
                             BonusCardView(selectedTab: $selectedTab, bonusPoints: userViewModel.user?.bonusPoints ?? 0)
                                 .padding(.horizontal, geometry.size.width * 0.04)
@@ -53,6 +57,7 @@ struct HomeView: View {
                             })
                             .sheet(isPresented: $isShowingInterestingList) {
                                 BannersListView(viewModel: bannersViewModel, headerName: "Интересное")
+                                    .environmentObject(bannersViewModel)
                             }
                             .padding(.horizontal, geometry.size.width * 0.01)
                             .padding(.bottom, geometry.size.height * 0.018)
@@ -66,6 +71,7 @@ struct HomeView: View {
                             })
                             .sheet(isPresented: $isShowingPromotionsList) {
                                 BannersListView(viewModel: bannersViewModel, headerName: "Акции")
+                                    .environmentObject(bannersViewModel)
                             }
                             .padding(.horizontal, geometry.size.width * 0.01)
                             .padding(.bottom, geometry.size.height * 0.018)
@@ -74,14 +80,19 @@ struct HomeView: View {
                                 .environmentObject(bannersViewModel)
                                 .padding(.bottom, geometry.size.height * 0.03)
                         
-                            BlockHeader(headerName: "Адреса магазинов", onAllTapped: {})
-                                .padding(.horizontal, geometry.size.width * 0.01)
-                                .padding(.bottom, geometry.size.height * 0.018)
+                            BlockHeader(headerName: "Адреса магазинов", onAllTapped: {
+                                isShowingMarketList = true
+                            })
+                            .sheet(isPresented: $isShowingMarketList) {
+                                MarketListView(viewModel: marketsViewModel, headerName: "Адреса магазинов")
+                                    .environmentObject(marketsViewModel)
+                            }
+                            .padding(.horizontal, geometry.size.width * 0.01)
+                            .padding(.bottom, geometry.size.height * 0.018)
                         
                             StoreScrollView()
                                 .environmentObject(marketsViewModel)
                                 .padding(.bottom, geometry.size.height * 0.01)
-                                .padding(.horizontal, geometry.size.width * 0.01)
                         
                             SocialButtonsView()
                                 .padding(.bottom, geometry.size.height * 0.1)
@@ -102,6 +113,8 @@ struct HomeView: View {
         .onAppear {
             if let uid = userSession.userID {
                 userViewModel.fetchUserData(uid: uid)
+                bannersViewModel.fetchBannersIfNeeded()
+                storyData.fetchStoriesIfNeeded()
             }
         }
     }
@@ -146,8 +159,8 @@ struct BlockHeader: View {
 }
     
     
-    // оверлей на сторис
-    struct StoryOverlayView: View {
+// оверлей на сторис
+struct StoryOverlayView: View {
     @EnvironmentObject var storyData: StoryViewModel
     
     var body: some View {
@@ -156,80 +169,68 @@ struct BlockHeader: View {
             .background(Color.black)
             .environmentObject(storyData)
             .ignoresSafeArea()
-        }
     }
+}
     // Сторис
-    struct StoriesView: View {
-        @ObservedObject var storyData: StoryViewModel
-        
-        var body: some View {
-            // For now, this is just a placeholder view
-            ZStack {
-                ScrollView(.horizontal,showsIndicators: false) {
-                    
-                    HStack (spacing: 12) {
-                        ForEach($storyData.stories){$bundle in
+struct StoriesView: View {
+    @ObservedObject var storyData: StoryViewModel
+    
+    var body: some View {
+        ZStack {
+            if storyData.isLoading {
+                ProgressView()
+            } else {
+                ScrollView(.horizontal, showsIndicators: false) {
+                    HStack(spacing: 12) {
+                        ForEach($storyData.stories) { $bundle in
                             ProfileStories(bundle: $bundle)
                                 .environmentObject(storyData)
-                            
                         }
-                        
-                        
                     }
-                    .padding(.horizontal,15)
-                    .padding(.top,8)
-                    .padding(.bottom,10)
+                    .padding(.horizontal, 15)
+                    .padding(.top, 8)
+                    .padding(.bottom, 10)
                 }
-//                .overlay (
-//                    StoryView()
-//                        .environmentObject(storyData)
-//                )
             }
-            
+        }
+        .onAppear {
+            print("StoriesView appeared with stories: \(storyData.stories)")
         }
     }
+}
     
-    struct ProfileStories: View{
-        @Binding var bundle: StoryBundle
-        @Environment(\.colorScheme) var scheme
-        
-        @EnvironmentObject var storyData: StoryViewModel
-        
-        var body: some View{
-            Image (bundle.profileImage)
+struct ProfileStories: View {
+    @Binding var bundle: StoryBundle
+    @Environment(\.colorScheme) var scheme
+    @EnvironmentObject var storyData: StoryViewModel
+    
+    var body: some View {
+        if let url = URL(string: bundle.profileImage) {
+            WebImage(url: url)
                 .resizable()
                 .aspectRatio(contentMode: .fill)
-                .frame (width: 60, height: 60)
+                .frame(width: 60, height: 60)
                 .clipShape(Circle())
-            
                 .padding(2)
-                .background(scheme == .dark ? .black : .white , in:
-                                Circle())
+                .background(scheme == .dark ? Color.black : Color.white, in: Circle())
                 .padding(3)
                 .background(
-                    LinearGradient(colors: [
-                        .red,
-                        .orange,
-                        .red,
-                        .orange
-                    ],
-                                   startPoint: .top,
-                                   endPoint: .bottom)
-                    .clipShape(Circle())
-                    .opacity(bundle.isSeen ? 0 : 1)
+                    LinearGradient(colors: [.red, .orange, .red, .orange], startPoint: .top, endPoint: .bottom)
+                        .clipShape(Circle())
+                        .opacity(bundle.isSeen ? 0 : 1)
                 )
                 .onTapGesture {
-                    
-                    withAnimation{
+                    withAnimation {
                         bundle.isSeen = true
-                        
-                        // Saving current Bundle and toggling story...
                         storyData.currentStory = bundle.id
                         storyData.showStory = true
                     }
                 }
+        } else {
+            Text("Image not available")
         }
     }
+}
     
     
     
@@ -289,15 +290,18 @@ struct BonusCardView: View {
 }
 
 
-    struct InterestingSectionView: View {
-        
-        @EnvironmentObject var viewModel: BannersViewModel
-        
-        var body: some View {
+struct InterestingSectionView: View {
+    @EnvironmentObject var viewModel: BannersViewModel
+    
+    var body: some View {
+        if viewModel.isLoading {
+            ProgressView()
+                .frame(height: 166)
+        } else {
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(spacing: 10) {
                     ForEach(viewModel.interesting) { interesting in
-                        BannerView(banner: interesting,width: 280,height: 166)
+                        BannerView(banner: interesting, width: 280, height: 166)
                             .onTapGesture {
                                 // Обработка нажатия на баннер
                             }
@@ -308,15 +312,20 @@ struct BonusCardView: View {
             .scrollTargetLayout()
         }
     }
+}
 
-    struct PromotionsSectionView: View {
-        @EnvironmentObject var viewModel: BannersViewModel
-        
-        var body: some View {
+struct PromotionsSectionView: View {
+    @EnvironmentObject var viewModel: BannersViewModel
+    
+    var body: some View {
+        if viewModel.isLoading {
+            ProgressView()
+                .frame(height: 166)
+        } else {
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(spacing: 10) {
                     ForEach(viewModel.promotions) { promotion in
-                        BannerView(banner: promotion,width: 280,height: 166)
+                        BannerView(banner: promotion, width: 280, height: 166)
                             .onTapGesture {
                                 // Обработка нажатия на баннер
                             }
@@ -327,7 +336,7 @@ struct BonusCardView: View {
             .scrollTargetLayout()
         }
     }
-
+}
     
     // Horizontal ScrollView для магазинов
     
@@ -339,28 +348,30 @@ struct SocialButtonsView: View {
     
     var body: some View {
         GeometryReader { geometry in
-            HStack(spacing: geometry.size.width * 0.03) { // Dynamic spacing based on the width of the view
-                // Instagram Button
-                Button(action: {
-                    openURL(instagramURL)
-                }) {
-                    socialButtonContent(iconName: "instagram", text: "Instagram")
+            ZStack {
+                HStack(spacing: geometry.size.width * 0.03) { // Dynamic spacing based on the width of the view
+                    // Instagram Button
+                    Button(action: {
+                        openURL(instagramURL)
+                    }) {
+                        socialButtonContent(iconName: "instagram", text: "Instagram")
+                    }
+                    .frame(width: geometry.size.width * 0.45, height: 55) // Dynamic width
+                    .background(Color.white)
+                    .cornerRadius(10)
+                    
+                    // WhatsApp Button
+                    Button(action: {
+                        openURL(whatsappURL)
+                    }) {
+                        socialButtonContent(iconName: "whatsapp", text: "Whatsapp")
+                    }
+                    .frame(width: geometry.size.width * 0.45, height: 55) // Dynamic width
+                    .background(Color.white)
+                    .cornerRadius(10)
                 }
-                .frame(width: geometry.size.width * 0.45, height: 55) // Dynamic width
-                .background(Color.white)
-                .cornerRadius(10)
-                
-                // WhatsApp Button
-                Button(action: {
-                    openURL(whatsappURL)
-                }) {
-                    socialButtonContent(iconName: "whatsapp", text: "Whatsapp")
-                }
-                .frame(width: geometry.size.width * 0.45, height: 55) // Dynamic width
-                .background(Color.white)
-                .cornerRadius(10)
+                .frame(maxWidth: .infinity) // Center the HStack
             }
-            .padding(.horizontal, 10) // Adjust padding for the whole HStack if needed
         }
     }
     
