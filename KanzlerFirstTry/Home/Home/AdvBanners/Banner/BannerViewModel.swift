@@ -58,11 +58,12 @@ class BannersViewModel: ObservableObject {
                 let title = data["title"] as? String ?? ""
                 let imagePath = data["imageURL"] as? String ?? ""
                 let timestamp = data["timestamp"] as? Timestamp ?? Timestamp(date: Date())
+                let description = data["description"] as? String ?? "" // новое поле
                 
                 dispatchGroup.enter()
                 self.fetchImageURL(for: imagePath) { url in
                     if let url = url {
-                        let banner = BannerModel(imagePath: url, title: title, timestamp: timestamp)
+                        let banner = BannerModel(imagePath: url, title: title, timestamp: timestamp, description: description.replacingOccurrences(of: "\\n", with: "\n"))
                         banners.append(banner)
                     }
                     dispatchGroup.leave()

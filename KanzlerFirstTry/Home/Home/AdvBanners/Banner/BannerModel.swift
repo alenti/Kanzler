@@ -13,11 +13,13 @@ struct BannerModel: Identifiable {
     let imagePath: String
     let title: String
     let timestamp: Timestamp
+    let description: String // новое поле
     
-    init(id: UUID = UUID(), imagePath: String, title: String, timestamp: Timestamp) {
+    init(id: UUID = UUID(), imagePath: String, title: String, timestamp: Timestamp, description: String) {
         self.id = id
         self.imagePath = imagePath
         self.title = title
         self.timestamp = timestamp
+        self.description = description
     }
 }

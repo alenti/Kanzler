@@ -40,6 +40,7 @@ struct BannersListView: View {
                     }
                     .padding(.top)
                     .padding(.horizontal)
+                    .padding(.bottom)
                 }
                 .scrollTargetLayout()
             }

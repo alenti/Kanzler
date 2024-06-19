@@ -66,6 +66,7 @@
 		036DC4D12B1137F600FB41BC /* FirebaseStorageCombine-Community in Frameworks */ = {isa = PBXBuildFile; productRef = 036DC4D02B1137F600FB41BC /* FirebaseStorageCombine-Community */; };
 		036DC4D32B11CEF400FB41BC /* SignIn.swift in Sources */ = {isa = PBXBuildFile; fileRef = 036DC4D22B11CEF400FB41BC /* SignIn.swift */; };
 		036DC4D72B11D04900FB41BC /* Registration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 036DC4D62B11D04900FB41BC /* Registration.swift */; };
+		0374FE022C22B49C003A0C6A /* BannerPageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0374FE012C22B49C003A0C6A /* BannerPageView.swift */; };
 		037873702B07D9560064684D /* Rubik.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0378736E2B07D9560064684D /* Rubik.ttf */; };
 		039A8B952C08FDA7000EC42F /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = 039A8B942C08FDA7000EC42F /* FirebaseAnalytics */; };
 		039A8B972C08FDA7000EC42F /* FirebaseAnalyticsOnDeviceConversion in Frameworks */ = {isa = PBXBuildFile; productRef = 039A8B962C08FDA7000EC42F /* FirebaseAnalyticsOnDeviceConversion */; };
@@ -146,6 +147,7 @@
 		036DC4972B11368400FB41BC /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		036DC4D22B11CEF400FB41BC /* SignIn.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignIn.swift; sourceTree = "<group>"; };
 		036DC4D62B11D04900FB41BC /* Registration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Registration.swift; sourceTree = "<group>"; };
+		0374FE012C22B49C003A0C6A /* BannerPageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BannerPageView.swift; sourceTree = "<group>"; };
 		0378736E2B07D9560064684D /* Rubik.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Rubik.ttf; sourceTree = "<group>"; };
 		039E40422B07A849007F4875 /* KanzlerFirstTry.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = KanzlerFirstTry.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		039E40452B07A849007F4875 /* KanzlerFirstTryApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KanzlerFirstTryApp.swift; sourceTree = "<group>"; };
@@ -428,6 +430,7 @@
 			children = (
 				03A8B80A2BDAD2C2009DEA44 /* BannerModel.swift */,
 				03A8B80E2BDAD353009DEA44 /* BannerViewModel.swift */,
+				0374FE012C22B49C003A0C6A /* BannerPageView.swift */,
 				03A8B8102BDB9195009DEA44 /* BannerView.swift */,
 				03A8B81C2BDBB944009DEA44 /* BannersListView.swift */,
 			);
@@ -618,6 +621,7 @@
 				03A8B8112BDB9195009DEA44 /* BannerView.swift in Sources */,
 				033D2BD02BC7FD0900CF55FB /* CustomNavigationBar.swift in Sources */,
 				036DC4D72B11D04900FB41BC /* Registration.swift in Sources */,
+				0374FE022C22B49C003A0C6A /* BannerPageView.swift in Sources */,
 				0317606C2C0DF5450016EF83 /* ErrorHandler.swift in Sources */,
 				03DCE11A2B629F510064B78A /* QR-CodeView.swift in Sources */,
 				03A8B80B2BDAD2C3009DEA44 /* BannerModel.swift in Sources */,

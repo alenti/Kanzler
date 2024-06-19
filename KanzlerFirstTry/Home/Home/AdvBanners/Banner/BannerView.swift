@@ -13,6 +13,8 @@ struct BannerView: View {
     var width: CGFloat?
     var height: CGFloat?
 
+    @State private var isShowingBannerPage = false
+
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             WebImage(url: URL(string: banner.imagePath))
@@ -27,6 +29,12 @@ struct BannerView: View {
             Text(banner.title)
                 .font(.custom("Rubik-LightItalic", size: 16))
                 .padding(.horizontal, 7)
+        }
+        .onTapGesture {
+            isShowingBannerPage.toggle()
+        }
+        .fullScreenCover(isPresented: $isShowingBannerPage) {
+            BannerPageView(title: banner.title, imagePath: banner.imagePath, description: banner.description, timestamp: banner.timestamp)
         }
     }
 }
