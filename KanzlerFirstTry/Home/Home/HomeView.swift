@@ -48,7 +48,9 @@ struct HomeView: View {
                             StoriesView(storyData: storyData)
                                 .frame(height: geometry.size.height * 0.12)
                         
-                            BonusCardView(selectedTab: $selectedTab, bonusPoints: userViewModel.user?.bonusPoints ?? 0)
+                            BonusCardView(selectedTab: $selectedTab)
+                                .environmentObject(userViewModel)
+                            
                                 .padding(.horizontal, geometry.size.width * 0.04)
                                 .padding(.bottom, geometry.size.height * 0.05)
                         
@@ -237,7 +239,7 @@ struct ProfileStories: View {
     /// QR CODE
 struct BonusCardView: View {
     @Binding var selectedTab: MainTabView.Tab
-    var bonusPoints: Int
+    @EnvironmentObject var userViewModel: UserViewModel
     
     var body: some View {
         GeometryReader { geometry in
@@ -253,7 +255,7 @@ struct BonusCardView: View {
                                     .foregroundColor(.white)
                                 
                                 HStack(alignment: .bottom) {
-                                    Text("\(bonusPoints)")
+                                    Text("\(userViewModel.user?.bonusPoints ?? 0)")
                                         .foregroundColor(.white)
                                         .font(.custom("Rubik-SemiBold", size: 40))
                                     
@@ -268,14 +270,18 @@ struct BonusCardView: View {
                             Spacer()
                             
                             ZStack {
-                                Image("qr-kod") // Фото в качестве фона
-                                    .resizable()
-                                    .scaledToFit()
-                                    .frame(width: geometry.size.width * 0.33, height: geometry.size.width * 0.33) // Изменяем размер в зависимости от ширины
-                                    .zIndex(1)
-                                RoundedRectangle(cornerRadius: 10) // Создаем RoundedRectangle с закругленными углами
-                                    .fill(Color.white) // Заполняем его цветом
-                                    .frame(width: geometry.size.width * 0.35, height: geometry.size.width * 0.35) // Немного больше размер QR кода
+                                if let qrCodeImage = userViewModel.qrCodeImage {
+                                    Image(uiImage: qrCodeImage)
+                                        .resizable()
+                                        .scaledToFit()
+                                        .frame(width: geometry.size.width * 0.31, height: geometry.size.width * 0.31)
+                                        .zIndex(1)
+                                } else {
+                                    ProgressView()
+                                }
+                                RoundedRectangle(cornerRadius: 15)
+                                    .fill(Color.white)
+                                    .frame(width: geometry.size.width * 0.38, height: geometry.size.width * 0.38)
                             }
                         }
                         .padding(.horizontal)

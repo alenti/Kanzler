@@ -14,53 +14,51 @@ struct ProfileView: View {
     @State private var showLogoutAlert = false
 
     var body: some View {
-        NavigationView {
-            GeometryReader { geometry in
-                ZStack {
-                    VStack(spacing: 0) {
-                        CustomNavigationBar(title: "Профиль", isCentered: false)
-                        ScrollView {
-                            VStack(alignment: .leading, spacing: 0) {
-                                if let user = viewModel.user {
-                                    // Профиль пользователя
-                                    VStack(alignment: .leading, spacing: 0) {
-                                        ProfileHeaderView(user: user)
-                                            .padding(.top, 10)
-                                        BonusCashbackView(bonusPoints: user.bonusPoints, discount: user.discount)
-                                        SettingsMenuView(menuItems: menuItems)
-                                        StoreScrollView()
-                                            .environmentObject(marketsViewModel)
-                                            .padding(.vertical)
-                                        LogoutButton {
-                                            showLogoutAlert = true
-                                        }
-                                        .padding(.bottom, 30)
+        GeometryReader { geometry in
+            ZStack {
+                VStack(spacing: 0) {
+                    CustomNavigationBar(title: "Профиль", isCentered: false)
+                    ScrollView {
+                        VStack(alignment: .leading, spacing: 0) {
+                            if let user = viewModel.user {
+                                // Профиль пользователя
+                                VStack(alignment: .leading, spacing: 0) {
+                                    ProfileHeaderView(user: user)
+                                        .padding(.top, 10)
+                                    BonusCashbackView(bonusPoints: user.bonusPoints, discount: user.discount)
+                                    SettingsMenuView(menuItems: menuItems)
+                                    StoreScrollView()
+                                        .environmentObject(marketsViewModel)
+                                        .padding(.vertical)
+                                    LogoutButton {
+                                        showLogoutAlert = true
                                     }
-                                } else if let errorMessage = viewModel.errorMessage {
-                                    // Отображение сообщения об ошибке
-                                    Text(errorMessage)
-                                        .foregroundColor(.red)
-                                } else {
-                                    // Пустое представление, если данные еще не загружены
-                                    VStack(alignment: .leading, spacing: 0) {
-                                        ProfileHeaderView(user: UserData.placeholder)
-                                            .padding(.top, 10)
-                                        BonusCashbackView(bonusPoints: 0, discount: 0)
-                                        SettingsMenuView(menuItems: menuItems)
-                                        StoreScrollView()
-                                            .environmentObject(marketsViewModel)
-                                            .padding(.vertical)
-                                        LogoutButton {
-                                            showLogoutAlert = true
-                                        }
-                                        .padding(.bottom, 30)
-                                    }
-                                    .redacted(reason: .placeholder)
+                                    .padding(.bottom, 30)
                                 }
+                            } else if let errorMessage = viewModel.errorMessage {
+                                // Отображение сообщения об ошибке
+                                Text(errorMessage)
+                                    .foregroundColor(.red)
+                            } else {
+                                // Пустое представление, если данные еще не загружены
+                                VStack(alignment: .leading, spacing: 0) {
+                                    ProfileHeaderView(user: UserData.placeholder)
+                                        .padding(.top, 10)
+                                    BonusCashbackView(bonusPoints: 0, discount: 0)
+                                    SettingsMenuView(menuItems: menuItems)
+                                    StoreScrollView()
+                                        .environmentObject(marketsViewModel)
+                                        .padding(.vertical)
+                                    LogoutButton {
+                                        showLogoutAlert = true
+                                    }
+                                    .padding(.bottom, 30)
+                                }
+                                .redacted(reason: .placeholder)
                             }
                         }
-                        .background(Color(.systemGray6))
                     }
+                    .background(Color(.systemGray6))
                 }
             }
         }
@@ -80,15 +78,20 @@ struct ProfileView: View {
         }
     }
 
-    private let menuItems = [
-        MenuItem(icon: "clock.arrow.circlepath", title: "История покупок"),
-        MenuItem(icon: "gear", title: "Настройки"),
-        MenuItem(icon: "bell", title: "Уведомления"),
-        MenuItem(icon: "star", title: "Бонусная программа"),
-        MenuItem(icon: "questionmark.circle", title: "Поддержка")
-    ]
+    private var menuItems: [MenuItem] {
+        [
+            MenuItem(icon: "clock.arrow.circlepath", title: "История покупок"),
+            MenuItem(icon: "gear", title: "Настройки", action: {
+                if let url = URL(string: UIApplication.openSettingsURLString) {
+                    UIApplication.shared.open(url)
+                }
+            }),
+            MenuItem(icon: "bell", title: "Уведомления", destination: AnyView(NotificationView())),
+            MenuItem(icon: "star", title: "Бонусная программа"),
+            MenuItem(icon: "questionmark.circle", title: "Поддержка")
+        ]
+    }
 }
-
 
 // Header View с информацией о пользователе
 struct ProfileHeaderView: View {
@@ -173,7 +176,37 @@ struct SettingsRow: View {
     let item: MenuItem
     
     var body: some View {
-        NavigationLink(destination: Text(item.title)) {
+        if let destination = item.destination {
+            NavigationLink(destination: destination) {
+                HStack {
+                    Image(systemName: item.icon)
+                        .foregroundColor(.black)
+                        .font(Font.system(size: 20, weight: .light))
+                    Text(item.title)
+                        .foregroundColor(.black)
+                        .font(.custom("Rubik-Light", size: 16))
+                    Spacer()
+                    Image(systemName: "chevron.right")
+                        .foregroundColor(.gray)
+                }
+                .padding()
+            }
+        } else if let action = item.action {
+            Button(action: action) {
+                HStack {
+                    Image(systemName: item.icon)
+                        .foregroundColor(.black)
+                        .font(Font.system(size: 20, weight: .light))
+                    Text(item.title)
+                        .foregroundColor(.black)
+                        .font(.custom("Rubik-Light", size: 16))
+                    Spacer()
+                    Image(systemName: "chevron.right")
+                        .foregroundColor(.gray)
+                }
+                .padding()
+            }
+        } else {
             HStack {
                 Image(systemName: item.icon)
                     .foregroundColor(.black)
@@ -198,11 +231,11 @@ struct StoreScrollView: View {
         ScrollView(.horizontal, showsIndicators: false) {
             HStack(spacing: 20) {
                 ForEach(viewModel.markets) { markets in
-                    MarketInfoView(store: markets,width: 240,height: 115,useAdaptiveWidth:false)
+                    MarketInfoView(store: markets, width: 240, height: 115, useAdaptiveWidth: false)
                 }
             }
             .padding(.horizontal)
-            .padding(.leading,6)
+            .padding(.leading, 6)
         }
         .scrollTargetLayout()
     }
@@ -235,7 +268,18 @@ struct MenuItem: Identifiable, Hashable {
     let id = UUID()
     let icon: String
     let title: String
+    var action: (() -> Void)? = nil
+    var destination: AnyView? = nil
+    
+    static func == (lhs: MenuItem, rhs: MenuItem) -> Bool {
+        return lhs.id == rhs.id
+    }
+    
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(id)
+    }
 }
+
 
 #Preview {
     ProfileView()

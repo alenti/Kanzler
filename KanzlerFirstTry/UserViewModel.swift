@@ -7,12 +7,14 @@
 
 import Combine
 import Firebase
+import CoreImage.CIFilterBuiltins
 
 class UserViewModel: ObservableObject {
     @Published var user: UserData?
     @Published var isLoading = false
     @Published var errorMessage: String?
-
+    @Published var qrCodeImage: UIImage?
+    
     private var db = Firestore.firestore()
     private var cancellables = Set<AnyCancellable>()
     private let cache = NSCache<NSString, UserData>()
@@ -22,6 +24,7 @@ class UserViewModel: ObservableObject {
         // Проверка наличия данных в кэше
         if let cachedUser = cache.object(forKey: uid as NSString) {
             self.user = cachedUser
+            self.generateQRCode(from: uid)
             return
         }
 
@@ -36,11 +39,26 @@ class UserViewModel: ObservableObject {
                     let data = document.data() ?? [:]
                     let userData = UserData(uid: uid, data: data)
                     self.user = userData
-                    // Сохранение данных в кэш
                     self.cache.setObject(userData, forKey: uid as NSString)
+                    self.generateQRCode(from: uid)
                 } else {
                     self.errorMessage = "Failed to fetch user data"
                 }
+            }
+        }
+    }
+
+    // Метод для генерации QR-кода из строки
+    private func generateQRCode(from string: String) {
+        let data = Data(string.utf8)
+        let filter = CIFilter.qrCodeGenerator()
+        filter.setValue(data, forKey: "inputMessage")
+
+        let transform = CGAffineTransform(scaleX: 10, y: 10)
+        if let qrImage = filter.outputImage?.transformed(by: transform) {
+            let context = CIContext()
+            if let cgImage = context.createCGImage(qrImage, from: qrImage.extent) {
+                self.qrCodeImage = UIImage(cgImage: cgImage)
             }
         }
     }

@@ -67,6 +67,7 @@
 		036DC4D32B11CEF400FB41BC /* SignIn.swift in Sources */ = {isa = PBXBuildFile; fileRef = 036DC4D22B11CEF400FB41BC /* SignIn.swift */; };
 		036DC4D72B11D04900FB41BC /* Registration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 036DC4D62B11D04900FB41BC /* Registration.swift */; };
 		0374FE022C22B49C003A0C6A /* BannerPageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0374FE012C22B49C003A0C6A /* BannerPageView.swift */; };
+		0374FE042C231332003A0C6A /* NotificationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0374FE032C231332003A0C6A /* NotificationView.swift */; };
 		037873702B07D9560064684D /* Rubik.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0378736E2B07D9560064684D /* Rubik.ttf */; };
 		039A8B952C08FDA7000EC42F /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = 039A8B942C08FDA7000EC42F /* FirebaseAnalytics */; };
 		039A8B972C08FDA7000EC42F /* FirebaseAnalyticsOnDeviceConversion in Frameworks */ = {isa = PBXBuildFile; productRef = 039A8B962C08FDA7000EC42F /* FirebaseAnalyticsOnDeviceConversion */; };
@@ -148,6 +149,7 @@
 		036DC4D22B11CEF400FB41BC /* SignIn.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignIn.swift; sourceTree = "<group>"; };
 		036DC4D62B11D04900FB41BC /* Registration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Registration.swift; sourceTree = "<group>"; };
 		0374FE012C22B49C003A0C6A /* BannerPageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BannerPageView.swift; sourceTree = "<group>"; };
+		0374FE032C231332003A0C6A /* NotificationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationView.swift; sourceTree = "<group>"; };
 		0378736E2B07D9560064684D /* Rubik.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Rubik.ttf; sourceTree = "<group>"; };
 		039E40422B07A849007F4875 /* KanzlerFirstTry.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = KanzlerFirstTry.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		039E40452B07A849007F4875 /* KanzlerFirstTryApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KanzlerFirstTryApp.swift; sourceTree = "<group>"; };
@@ -319,6 +321,7 @@
 			children = (
 				03DCE11B2B629F670064B78A /* ProfileView.swift */,
 				036AE3452C188936002EF6A3 /* ProfileViewModel.swift */,
+				0374FE032C231332003A0C6A /* NotificationView.swift */,
 			);
 			path = Settings;
 			sourceTree = "<group>";
@@ -637,6 +640,7 @@
 				033D2BDC2BC99D3800CF55FB /* UserSession.swift in Sources */,
 				036AE34C2C1B7260002EF6A3 /* SplashScreenView.swift in Sources */,
 				03B311752B38670800F97551 /* AuthManager.swift in Sources */,
+				0374FE042C231332003A0C6A /* NotificationView.swift in Sources */,
 				030025CB2B3196F700EC51BE /* NumberConfirmation.swift in Sources */,
 				03A6BF832B2F5430009CCDDC /* DropDown.swift in Sources */,
 				039E40482B07A849007F4875 /* ContentView.swift in Sources */,
